@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07120b" />
+      <stop offset="1" stop-color="#275438" />
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="1100" rx="56" fill="url(#g)" />
+
+  <g opacity="0.9">
+    <circle cx="700" cy="340" r="240" fill="#c7b07b" opacity="0.15" />
+    <circle cx="250" cy="250" r="190" fill="#10261a" opacity="0.45" />
+  </g>
+
+  <g opacity="0.22" fill="#e6f2eb">
+    <path d="M220 580h460c28 0 50 22 50 50v220c0 28-22 50-50 50H220c-28 0-50-22-50-50V630c0-28 22-50 50-50z" />
+    <path d="M220 580l230 170 230-170" fill="#000" opacity="0.18" />
+  </g>
+
+  <text x="64" y="96" fill="#e6f2eb" font-family="serif" font-size="34" letter-spacing="1">
+    Contact Yakra
+  </text>
+  <text x="64" y="136" fill="#bfe2ce" font-family="sans-serif" font-size="16" letter-spacing="4">
+    EMAIL • WHATSAPP • INQUIRIES
+  </text>
+</svg>

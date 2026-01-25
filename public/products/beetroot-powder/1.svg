@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#07120b" />
+      <stop offset="1" stop-color="#275438" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)" />
+  <circle cx="920" cy="280" r="260" fill="#c7b07b" opacity="0.14" />
+  <circle cx="820" cy="600" r="180" fill="#c7b07b" opacity="0.08" />
+  <path d="M360 720c0-160 60-300 180-420 60-60 150-90 220-50 80 50 70 160-10 270-90 120-210 210-360 270-40 20-30-40-30-70z" fill="#050b07" opacity="0.26" />
+  <text x="72" y="110" fill="#e6f2eb" font-family="serif" font-size="44" letter-spacing="1">Beetroot Powder</text>
+  <text x="72" y="155" fill="#bfe2ce" font-family="sans-serif" font-size="16" letter-spacing="5">YAKRA ORGANICS</text>
+</svg>

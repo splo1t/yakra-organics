@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 20% 10%, rgba(39, 84, 56, 0.35), transparent 60%),
+    radial-gradient(900px 500px at 80% 30%, rgba(199, 176, 123, 0.12), transparent 60%),
+    radial-gradient(1000px 600px at 50% 100%, rgba(16, 38, 26, 0.5), transparent 55%),
+    #050b07;
+}
+
+::selection {
+  background: rgba(199, 176, 123, 0.25);
+}
+
+a {
+  text-underline-offset: 4px;
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}
