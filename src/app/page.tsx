@@ -17,14 +17,14 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-[100dvh] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70 md:bg-fixed"
           style={{ backgroundImage: `url(${siteConfig.heroImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-950/40 via-forest-950/70 to-forest-950" />
 
-        <Container className="relative py-20 sm:py-28">
+        <Container className="relative flex min-h-[100dvh] flex-col justify-center py-20 sm:py-28">
           <div className="max-w-2xl">
             <p className="text-sm font-medium tracking-widest text-accent-500/90">
               Yakra Organics • Yakra Glamp

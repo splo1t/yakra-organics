@@ -3,10 +3,14 @@ import { notFound } from 'next/navigation';
 
 import { ButtonAnchor, ButtonLink } from '@/components/Button';
 import { Container } from '@/components/Container';
+import { ProductCard } from '@/components/ProductCard';
 import { ProductGallery } from '@/components/ProductGallery';
-import { products, getProductBySlug } from '@/data/products';
+import { products, getProductBySlug, categories } from '@/data/products';
 import { siteConfig } from '@/data/siteConfig';
 import { formatLkr } from '@/lib/format';
+
+import { ProductSearch } from './ProductSearch';
+import { RelatedProducts } from './RelatedProducts';
 
 type Params = { slug: string };
 
@@ -144,6 +148,12 @@ export default function ProductPage({ params }: { params: Params }) {
           </div>
         </div>
       </div>
+
+      <div className="mt-16">
+        <ProductSearch products={products} categories={categories} />
+      </div>
+
+      <RelatedProducts currentProduct={product} allProducts={products} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </Container>
