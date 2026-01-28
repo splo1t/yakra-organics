@@ -11,7 +11,6 @@ export const siteConfig = {
   contact: {
     email: 'hello@yakra.lk',
     phoneDisplay: '+94 77 123 4567',
-    whatsappE164: '+94771234567',
     address: 'Sri Lanka'
   }
 } as const;

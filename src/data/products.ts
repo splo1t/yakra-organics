@@ -1,5 +1,14 @@
 export type ProductCategory = 'Dehydrated Powders' | 'Microgreens';
 
+export type BuyingOption = {
+  id: string;
+  label: string;
+  price: number;
+  bestFor: string;
+  priceSubtext: string;
+  isMostPopular?: boolean;
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -8,7 +17,8 @@ export type Product = {
   tags: string[];
   shortDescription: string;
   description: string;
-  priceLkr?: number;
+  priceLkr: number;
+  buyingOptions?: BuyingOption[];
   images: string[];
   usage: string;
   storage: string;
@@ -17,6 +27,32 @@ export type Product = {
 };
 
 export const categories: ProductCategory[] = ['Dehydrated Powders', 'Microgreens'];
+
+// Default buying options for microgreens products
+export const defaultMicrogreensBuyingOptions: BuyingOption[] = [
+  {
+    id: 'single-tray',
+    label: 'Single Live Tray',
+    price: 1150,
+    bestFor: 'One-time trial / Gift',
+    priceSubtext: 'One-time purchase'
+  },
+  {
+    id: 'intro-offer',
+    label: 'Introductory Offer',
+    price: 950,
+    bestFor: 'First-time customers (Limited time)',
+    priceSubtext: 'Limited time for first-time customers'
+  },
+  {
+    id: 'monthly-subscription',
+    label: 'Monthly Subscription',
+    price: 3600,
+    bestFor: '4 Trays (1 per week) — Most Popular',
+    priceSubtext: 'Includes 4 trays (1 per week)',
+    isMostPopular: true
+  }
+];
 
 export const products: Product[] = [
   {
@@ -80,7 +116,8 @@ export const products: Product[] = [
     shortDescription: 'Crunchy, nutty microgreens—premium freshness for salads, bowls, and sandwiches.',
     description:
       'Yakra Sunflower Microgreens add a crisp texture and clean flavor to your meals. Handled with care to keep them fresh, vibrant, and ready to elevate everyday dishes.',
-    priceLkr: 1800,
+    priceLkr: 1150,
+    buyingOptions: defaultMicrogreensBuyingOptions,
     images: ['/products/sunflower-microgreens/1.svg'],
     usage: 'Rinse lightly if needed and add just before serving. Perfect for salads, wraps, bowls, and eggs.',
     storage:
@@ -96,7 +133,8 @@ export const products: Product[] = [
     shortDescription: 'Peppery, bold microgreens—an elegant garnish with real flavor.',
     description:
       'Yakra Radish Microgreens offer a clean, peppery kick. Ideal for finishing dishes—soups, salads, sushi bowls, and modern Sri Lankan plates.',
-    priceLkr: 1800,
+    priceLkr: 1150,
+    buyingOptions: defaultMicrogreensBuyingOptions,
     images: ['/products/radish-microgreens/1.svg', '/products/radish-microgreens/2.svg'],
     usage:
       'Use as a garnish or mix into salads. Add at the end to keep the texture crisp and the flavor fresh.',
@@ -114,6 +152,8 @@ export const products: Product[] = [
     shortDescription: 'Aromatic basil microgreens—luxury flavor for pasta, pizza, and salads.',
     description:
       'Yakra Basil Microgreens bring a refined aroma and a bright herbal finish. Great for contemporary plating and premium home cooking.',
+    priceLkr: 1150,
+    buyingOptions: defaultMicrogreensBuyingOptions,
     images: ['/products/basil-microgreens/1.svg'],
     usage: 'Scatter on finished dishes or mix into salads. Use as a final touch for maximum aroma.',
     storage:
