@@ -4,6 +4,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 
 import { Button } from '@/components/Button';
 import { siteConfig } from '@/data/siteConfig';
+import { WHATSAPP_NUMBER } from '@/data/whatsapp';
 
 type FormState = {
   name: string;
@@ -43,7 +44,6 @@ export function ContactForm() {
   }, [form]);
 
   const whatsappUrl = useMemo(() => {
-    const phone = siteConfig.contact.whatsappE164.replace('+', '');
     const text = [
       `Hi Yakra,`,
       `Topic: ${form.topic}`,
@@ -54,7 +54,7 @@ export function ContactForm() {
       .filter(Boolean)
       .join('\n');
 
-    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
   }, [form]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {

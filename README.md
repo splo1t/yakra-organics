@@ -75,7 +75,6 @@ export const siteConfig = {
   contact: {
     email: 'hello@yakra.lk',
     phoneDisplay: '+94 77 123 4567',
-    whatsappE164: '+94771234567',
     address: 'Sri Lanka'
   },
 
@@ -101,10 +100,11 @@ contact: {
 ```typescript
 contact: {
   phoneDisplay: '+94 77 987 6543',  // ← Change this (shown to users)
-  whatsappE164: '+94779876543',     // ← Change this (E.164 format for WhatsApp links)
   // ...
 }
 ```
+
+**Note:** For WhatsApp functionality, update the centralized WhatsApp number in `src/data/whatsapp.ts` (see section 3 below).
 
 **Physical Address:**
 ```typescript
@@ -155,10 +155,11 @@ The footer automatically pulls contact info from `siteConfig.ts`. To change what
 contact: {
   email: 'new-email@example.com',        // ← Footer will use this
   phoneDisplay: '+94 11 234 5678',        // ← Footer will use this
-  address: 'New Address, Sri Lanka',      // ← Footer will use this
-  whatsappE164: '+94112345678'            // ← For WhatsApp link
+  address: 'New Address, Sri Lanka'       // ← Footer will use this
 }
 ```
+
+To change the WhatsApp number used by the footer link, update `WHATSAPP_NUMBER` in `src/data/whatsapp.ts`.
 
 ### 2. Hero Image
 
@@ -173,7 +174,29 @@ heroImage: '/media/hero.svg',  // ← Change this filename
 2. Update the `heroImage` value with your new filename
 3. The image can be SVG, JPG, PNG, or WebP format
 
-### 3. Product Management
+### 3. WhatsApp Number Configuration
+
+All WhatsApp links throughout the site use a single centralized configuration in `src/data/whatsapp.ts`:
+
+```typescript
+// WhatsApp number in E.164 format without the + symbol
+// Format: country code + number (e.g., 94771234567 for Sri Lanka)
+export const WHATSAPP_NUMBER = '94771234567';
+```
+
+**To change the WhatsApp number:**
+1. Open `src/data/whatsapp.ts`
+2. Update the `WHATSAPP_NUMBER` constant with your number in international format (no + symbol)
+3. Example: For Sri Lankan number +94 77 123 4567, use: `'94771234567'`
+
+This number is automatically used for:
+- WhatsApp Order buttons on product pages (with buying options)
+- WhatsApp inquiry buttons on regular product pages
+- WhatsApp links in the footer
+- WhatsApp links on the contact page
+- Contact form WhatsApp submission
+
+### 4. Product Management
 
 All product data is stored in `src/data/products.ts`. No database needed!
 
@@ -226,6 +249,74 @@ tags: ['moringa', 'green', 'smoothie', 'immunity', 'energy'],
 
 Users can search by any of these tags on the organics page and product detail pages.
 
+#### Buying Options (Pricing Plans) + WhatsApp Ordering
+
+Some products (e.g., microgreens) support **buying options** (pricing plans). When a product has buying options:
+- The product page shows a **“Choose an option”** selector
+- The displayed price updates instantly when the option changes
+- The **Order on WhatsApp** button opens WhatsApp with a pre-filled message containing:
+  - selected option name
+  - product name
+  - current page URL
+  - selected price
+
+Buying options are defined in `src/data/products.ts` using this structure:
+
+```ts
+export type BuyingOption = {
+  id: string;
+  label: string;
+  price: number;
+  bestFor: string;
+  priceSubtext: string;
+  isMostPopular?: boolean;
+};
+```
+
+A product can include options like this:
+
+```ts
+import { defaultMicrogreensBuyingOptions } from '@/data/products';
+
+{
+  id: 'yakra-sunflower-microgreens',
+  slug: 'sunflower-microgreens',
+  name: 'Sunflower Microgreens',
+  category: 'Microgreens',
+  tags: ['microgreens', 'sunflower'],
+  shortDescription: '...',
+  description: '...',
+  priceLkr: 1150,
+  buyingOptions: defaultMicrogreensBuyingOptions,
+  images: ['/products/sunflower-microgreens/1.svg'],
+  usage: '...',
+  storage: '...',
+  shelfLife: '...'
+}
+```
+
+To add/edit the options and prices:
+1. Open `src/data/products.ts`
+2. Edit `defaultMicrogreensBuyingOptions` (or create a new options array for a specific product)
+3. Update:
+   - `label` (what shows in the selector)
+   - `bestFor` (helper text under the selector)
+   - `price` (used for the dynamic price display)
+   - `priceSubtext` (small text shown under the price)
+   - `isMostPopular` (adds a subtle “Most Popular” badge)
+
+#### WhatsApp message generation
+
+The WhatsApp order message is generated on click using this exact format:
+
+```text
+Hi! I'd like to order the {option} of {productName}.
+Price: LKR {price}
+Product: {url}
+```
+
+Line breaks are preserved by URL-encoding the message before opening WhatsApp.
+
 ---
 
 ## 📄 Pages Overview
@@ -239,29 +330,34 @@ Users can search by any of these tags on the organics page and product detail pa
 - Full product catalog with search and filters
 - Search by product name or tags
 - Filter by category
-- Product cards with images, prices, and quick view
+- Product cards with images and pricing:
+  - Products **with** buying options: display all 3 prices + "Most Popular" badge
+  - Products **without** buying options: display single price
 
 ### Product Detail Page (`/organics/[slug]`)
 - Dynamic pages generated from product data
 - Product gallery with multiple images
 - Full description, usage, storage, and shelf-life info
-- WhatsApp and email inquiry buttons
-- **NEW:** Search all products functionality
-- **NEW:** Related products section (shows 3 products from same category)
+- Buying option selector (for products with pricing plans) with instant price updates
+- **Order on WhatsApp** button with a pre-filled message (includes option + price + page URL)
+- Search all products functionality
+- Related products section (shows 3 products from same category)
 
 ### Contact Page (`/contact`)
 - Contact form for inquiries
 - Direct email and WhatsApp links
 - Social media links (Instagram, Facebook)
 - Business address and phone display
-- All contact info pulled from `siteConfig.ts`
+- Email/display info from `src/data/siteConfig.ts`
+- WhatsApp number for links from `src/data/whatsapp.ts`
 
 ### Footer
 - Site-wide footer on all pages
 - Quick navigation links
 - Contact information (email, WhatsApp, address)
 - Social media icons (Instagram, Facebook)
-- All content automatically updated from `siteConfig.ts`
+- Email/display info from `src/data/siteConfig.ts`
+- WhatsApp number for links from `src/data/whatsapp.ts`
 
 ---
 
@@ -306,9 +402,9 @@ Each page includes proper metadata for SEO:
 - Appears before the footer
 
 ### Contact Integration
-- WhatsApp integration with pre-filled messages
+- WhatsApp integration with pre-filled messages (ordering + inquiries)
 - Email integration with pre-filled subjects and body
-- All contact details centrally managed
+- WhatsApp number centrally managed in `src/data/whatsapp.ts`
 
 ---
 
@@ -381,8 +477,10 @@ const links = [
 - Verify image formats are supported (SVG, JPG, PNG, WebP)
 
 ### WhatsApp Link Not Working
-- Ensure `whatsappE164` is in E.164 format: `+[country code][number]`
-- Example: `+94771234567` (Sri Lanka)
+- Check that `WHATSAPP_NUMBER` in `src/data/whatsapp.ts` is in the correct format (international format without + symbol)
+- Example: `94771234567` (for Sri Lanka)
+- Verify the number doesn't have spaces or special characters
+- Test by clicking a WhatsApp link to see if it opens properly
 
 ### Search Not Finding Products
 - Check that tags are properly set on products

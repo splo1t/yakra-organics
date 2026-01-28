@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import { Container } from '@/components/Container';
 import { siteConfig } from '@/data/siteConfig';
+import { WHATSAPP_NUMBER } from '@/data/whatsapp';
 
 import { ContactForm } from './ContactForm';
 
@@ -46,7 +47,7 @@ export default function ContactPage() {
             <div>
               <div className="text-xs font-medium tracking-widest text-accent-500/90">WHATSAPP</div>
               <a
-                href={`https://wa.me/${siteConfig.contact.whatsappE164.replace('+', '')}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 className="mt-1 block text-forest-100 hover:underline"
               >
                 {siteConfig.contact.phoneDisplay}

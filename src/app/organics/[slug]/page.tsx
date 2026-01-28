@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ButtonAnchor, ButtonLink } from '@/components/Button';
+import { BuyingOptionSelector } from '@/components/BuyingOptionSelector';
 import { Container } from '@/components/Container';
-import { ProductCard } from '@/components/ProductCard';
 import { ProductGallery } from '@/components/ProductGallery';
 import { products, getProductBySlug, categories } from '@/data/products';
 import { siteConfig } from '@/data/siteConfig';
+import { WHATSAPP_NUMBER } from '@/data/whatsapp';
 import { formatLkr } from '@/lib/format';
 
 import { ProductSearch } from './ProductSearch';
@@ -40,7 +41,7 @@ export default function ProductPage({ params }: { params: Params }) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
 
-  const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsappE164.replace('+', '')}?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     `Hi Yakra, I'm interested in: ${product.name}. Please share availability and ordering details.`
   )}`;
 
@@ -70,15 +71,20 @@ export default function ProductPage({ params }: { params: Params }) {
       name: 'Yakra'
     },
     category: product.category,
-    offers:
-      typeof product.priceLkr === 'number'
-        ? {
-            '@type': 'Offer',
-            priceCurrency: 'LKR',
-            price: product.priceLkr,
-            availability: 'https://schema.org/InStock'
-          }
-        : undefined
+    offers: product.buyingOptions?.length
+      ? product.buyingOptions.map((option) => ({
+          '@type': 'Offer',
+          priceCurrency: 'LKR',
+          price: option.price,
+          availability: 'https://schema.org/InStock',
+          name: option.label
+        }))
+      : {
+          '@type': 'Offer',
+          priceCurrency: 'LKR',
+          price: product.priceLkr,
+          availability: 'https://schema.org/InStock'
+        }
   };
 
   return (
@@ -104,20 +110,24 @@ export default function ProductPage({ params }: { params: Params }) {
 
           <h1 className="mt-4 font-display text-4xl text-forest-100">{product.name}</h1>
 
-          <div className="mt-4 text-lg font-medium text-forest-100">
-            {typeof product.priceLkr === 'number' ? formatLkr(product.priceLkr) : 'Inquire for price'}
-          </div>
+          {product.buyingOptions ? (
+            <BuyingOptionSelector productName={product.name} buyingOptions={product.buyingOptions} />
+          ) : (
+            <div className="mt-4">
+              <div className="text-lg font-medium text-forest-100">{formatLkr(product.priceLkr)}</div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <ButtonAnchor href={whatsappUrl} target="_blank" rel="noreferrer">
+                  Inquire on WhatsApp
+                </ButtonAnchor>
+                <ButtonAnchor href={mailtoUrl} variant="secondary">
+                  Email to order
+                </ButtonAnchor>
+              </div>
+            </div>
+          )}
 
           <p className="mt-4 text-sm leading-relaxed text-forest-100/75">{product.description}</p>
-
-          <div className="mt-7 flex flex-wrap gap-3">
-            <ButtonAnchor href={whatsappUrl} target="_blank" rel="noreferrer">
-              Inquire on WhatsApp
-            </ButtonAnchor>
-            <ButtonAnchor href={mailtoUrl} variant="secondary">
-              Email to order
-            </ButtonAnchor>
-          </div>
 
           <div className="mt-10 grid gap-6 rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
             <div>

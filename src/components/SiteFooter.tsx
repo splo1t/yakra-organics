@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { siteConfig } from '@/data/siteConfig';
+import { WHATSAPP_NUMBER } from '@/data/whatsapp';
 import { Container } from '@/components/Container';
 
 const links = [
@@ -45,7 +46,7 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a href={`https://wa.me/${siteConfig.contact.whatsappE164.replace('+', '')}`} className="hover:text-forest-100">
+                <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="hover:text-forest-100">
                   WhatsApp {siteConfig.contact.phoneDisplay}
                 </a>
               </li>
