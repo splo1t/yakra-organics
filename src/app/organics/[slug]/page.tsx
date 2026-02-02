@@ -7,7 +7,6 @@ import { Container } from '@/components/Container';
 import { ProductGallery } from '@/components/ProductGallery';
 import { products, getProductBySlug, categories } from '@/data/products';
 import { siteConfig } from '@/data/siteConfig';
-import { WHATSAPP_NUMBER } from '@/data/whatsapp';
 import { formatLkr } from '@/lib/format';
 
 import { ProductSearch } from './ProductSearch';
@@ -40,10 +39,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 export default function ProductPage({ params }: { params: Params }) {
   const product = getProductBySlug(params.slug);
   if (!product) notFound();
-
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    `Hi Yakra, I'm interested in: ${product.name}. Please share availability and ordering details.`
-  )}`;
 
   const mailtoSubject = `Yakra.lk inquiry — ${product.name}`;
   const mailtoBody = [
@@ -95,6 +90,10 @@ export default function ProductPage({ params }: { params: Params }) {
         </ButtonLink>
       </div>
 
+      <div className="mt-10 mb-10">
+        <ProductSearch products={products} categories={categories} />
+      </div>
+
       <div className="grid gap-10 lg:grid-cols-2">
         <ProductGallery images={product.images} alt={product.name} />
 
@@ -117,9 +116,6 @@ export default function ProductPage({ params }: { params: Params }) {
               <div className="text-lg font-medium text-forest-100">{formatLkr(product.priceLkr)}</div>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <ButtonAnchor href={whatsappUrl} target="_blank" rel="noreferrer">
-                  Inquire on WhatsApp
-                </ButtonAnchor>
                 <ButtonAnchor href={mailtoUrl} variant="secondary">
                   Email to order
                 </ButtonAnchor>
@@ -129,25 +125,44 @@ export default function ProductPage({ params }: { params: Params }) {
 
           <p className="mt-4 text-sm leading-relaxed text-forest-100/75">{product.description}</p>
 
-          <div className="mt-10 grid gap-6 rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
-            <div>
-              <h2 className="text-sm font-medium text-forest-100">Usage</h2>
-              <p className="mt-2 text-sm leading-relaxed text-forest-100/70">{product.usage}</p>
+          {product.nutritionalBenefits ? (
+            <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
+              <h2 className="text-sm font-medium text-forest-100">
+                Nutritional Benefits (Health & Vitality)
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-forest-100/70 whitespace-pre-line">
+                {product.nutritionalBenefits}
+              </p>
             </div>
+          ) : null}
+
+          <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
             <div>
-              <h2 className="text-sm font-medium text-forest-100">Storage</h2>
-              <p className="mt-2 text-sm leading-relaxed text-forest-100/70">{product.storage}</p>
+              <h2 className="text-sm font-medium text-forest-100">How to Enjoy (Culinary Inspiration)</h2>
+              <p className="mt-2 text-sm leading-relaxed text-forest-100/70 whitespace-pre-line">
+                {product.usage}
+              </p>
             </div>
-            <div>
-              <h2 className="text-sm font-medium text-forest-100">Shelf-life</h2>
-              <p className="mt-2 text-sm leading-relaxed text-forest-100/70">{product.shelfLife}</p>
+            <div className="mt-6">
+              <h2 className="text-sm font-medium text-forest-100">Storage & Handling</h2>
+              <p className="mt-2 text-sm leading-relaxed text-forest-100/70 whitespace-pre-line">
+                {product.storage}
+              </p>
             </div>
+            {product.shelfLife ? (
+              <div className="mt-6">
+                <h2 className="text-sm font-medium text-forest-100">Shelf-life</h2>
+                <p className="mt-2 text-sm leading-relaxed text-forest-100/70">
+                  {product.shelfLife}
+                </p>
+              </div>
+            ) : null}
           </div>
 
           <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-6">
             <h2 className="font-display text-2xl text-forest-100">Need help choosing?</h2>
             <p className="mt-2 text-sm leading-relaxed text-forest-100/70">
-              Tell us what you’re looking for—wellness goals, taste preferences, or menu ideas—and we’ll
+              Tell us what you&apos;re looking for—wellness goals, taste preferences, or menu ideas—and we&apos;ll
               suggest the best fit.
             </p>
             <div className="mt-5">
@@ -157,10 +172,6 @@ export default function ProductPage({ params }: { params: Params }) {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-16">
-        <ProductSearch products={products} categories={categories} />
       </div>
 
       <RelatedProducts currentProduct={product} allProducts={products} />

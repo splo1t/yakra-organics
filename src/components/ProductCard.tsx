@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import type { Product } from '@/data/products';
-import { formatLkr } from '@/lib/format';
 
 export function ProductCard({ product }: { product: Product }) {
   const image = product.images[0];
@@ -35,34 +34,6 @@ export function ProductCard({ product }: { product: Product }) {
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-forest-100/70">
           {product.shortDescription}
         </p>
-
-        {product.buyingOptions ? (
-          <div className="mt-4">
-            <div className="grid gap-1.5">
-              {product.buyingOptions.map((option) => (
-                <div key={option.id} className="flex items-baseline justify-between text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-forest-100/70">{option.label}</span>
-                    {option.isMostPopular ? (
-                      <span className="rounded-full bg-accent-500/10 px-1.5 py-0.5 text-[9px] font-medium tracking-wide text-accent-500 ring-1 ring-accent-500/20">
-                        Popular
-                      </span>
-                    ) : null}
-                  </div>
-                  <span className="font-medium text-forest-100">{formatLkr(option.price)}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 text-right text-xs text-accent-500 group-hover:text-accent-500/90">
-              View options →
-            </div>
-          </div>
-        ) : (
-          <div className="mt-4 flex items-center justify-between">
-            <div className="text-sm font-medium text-forest-100">{formatLkr(product.priceLkr)}</div>
-            <div className="text-sm text-accent-500 group-hover:text-accent-500/90">View</div>
-          </div>
-        )}
       </div>
     </Link>
   );
