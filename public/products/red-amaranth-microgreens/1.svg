@@ -1,0 +1,9 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <rect width="800" height="600" fill="#dc2626" opacity="0.3"/>
+  <text x="400" y="300" font-family="Arial, sans-serif" font-size="24" fill="#e8ece9" text-anchor="middle" dominant-baseline="middle">Red Amaranth Microgreens</text>
+  <text x="400" y="340" font-family="Arial, sans-serif" font-size="16" fill="#e8ece9" opacity="0.7" text-anchor="middle">Product Image Placeholder</text>
+  <circle cx="400" cy="250" r="80" fill="#dc2626" opacity="0.5"/>
+  <circle cx="350" cy="270" r="60" fill="#b91c1c" opacity="0.4"/>
+  <circle cx="450" cy="270" r="60" fill="#b91c1c" opacity="0.4"/>
+</svg>

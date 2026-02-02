@@ -40,13 +40,8 @@ export function BuyingOptionSelector({
 
   function onOrder() {
     const url = typeof window !== 'undefined' ? window.location.href : '';
-    const price = formatLkrValue(selectedOption.price);
 
-    const message = [
-      `Hi! I'd like to order the ${selectedOption.label} of ${productName}.`,
-      `Price: LKR ${price}`,
-      `Product: ${url}`
-    ].join('\n');
+    const message = `I'd like to order ${selectedOption.label} of ${productName}.\nProduct: ${url}`;
 
     window.open(getWhatsAppUrl(message), '_blank', 'noreferrer');
   }
@@ -100,7 +95,7 @@ export function BuyingOptionSelector({
 
       <div className="mt-5">
         <Button type="button" onClick={onOrder} className="w-full py-3 text-base">
-          Order on WhatsApp
+          Order via WhatsApp
         </Button>
       </div>
     </div>

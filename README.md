@@ -22,47 +22,105 @@ The site will be available at `http://localhost:3000`
 
 ---
 
-## 📂 Project Structure
+## 📝 EDITING GUIDE - Everything You Need to Know
 
+This guide is organized by what you want to edit. Find your task below and follow the simple instructions.
+
+### 1. Want to Edit Products? (Add/Remove/Change)
+
+**Where to edit:** `src/data/products.ts`
+
+This file contains ALL product data. Add or modify products here—no database needed.
+
+#### Adding a New Product
+
+```typescript
+{
+  id: 'unique-product-id',
+  slug: 'url-friendly-name',
+  name: 'Product Name Displayed to Users',
+  category: 'Microgreens',  // or 'Dehydrated Powders'
+  tags: ['tag1', 'tag2', 'tag3'],  // For search functionality
+  shortDescription: 'Brief one-line description for cards',
+  description: 'Full detailed description...',
+  nutritionalBenefits: 'Optional nutritional info...',  // Optional field
+  priceLkr: 3500,  // Base price (used if no buying options)
+  buyingOptions: defaultMicrogreensBuyingOptions,  // Optional: use for multiple price tiers
+  images: ['/products/url-friendly-name/1.svg'],
+  usage: 'How to use...',
+  storage: 'Storage instructions...',
+  shelfLife: 'Shelf life info...',
+  featured: true  // Set true to show on homepage
+}
 ```
-├── public/                  # Static assets
-│   ├── media/              # Brand images (hero, contact, icons)
-│   └── products/           # Product images by slug
-├── src/
-│   ├── app/                # Next.js App Router pages
-│   │   ├── about/          # About page
-│   │   ├── contact/        # Contact page with form
-│   │   ├── glamp/          # Coming soon page
-│   │   ├── organics/       # Products listing and search
-│   │   │   └── [slug]/     # Dynamic product pages
-│   │   ├── layout.tsx      # Root layout with header/footer
-│   │   └── page.tsx        # Home page
-│   ├── components/          # Reusable UI components
-│   ├── data/               # Site and product data
-│   │   ├── products.ts     # Product catalog
-│   │   └── siteConfig.ts   # Brand, contact, and social settings
-│   └── lib/                # Utility functions
-├── tailwind.config.ts      # Tailwind CSS configuration
-├── tsconfig.json          # TypeScript configuration
-└── next.config.js         # Next.js configuration
-```
+
+#### Important Notes:
+- **slug** must match the folder name in `public/products/`
+- **tags** are used for search—include relevant keywords
+- **nutritionalBenefits** is optional but displays nicely on product pages
+- **usage** and **storage** text supports line breaks with `\n`
+
+#### Product Images
+
+1. Create folder: `public/products/your-product-slug/`
+2. Add images (SVG, JPG, PNG, or WebP)
+3. Reference in product: `images: ['/products/your-product-slug/1.svg']`
+
+#### Current Product Structure
+
+The site currently has **1 product**: Red Amaranth Microgreens
+
+To add more products, simply add them to the `products` array in `src/data/products.ts`.
 
 ---
 
-## 🎨 Color Palette (Dark Forest Theme)
+### 2. Want to Change Buying Options (Price Plans)?
 
-The site uses a custom dark forest color palette:
-- **forest-950**: Main background (#0a120f)
-- **forest-100**: Primary text (#e8ece9)
-- **accent-500**: Accent color (#84a98c)
+**Where to edit:** `src/data/products.ts`
+
+Find the `defaultMicrogreensBuyingOptions` array (near the top of the file):
+
+```typescript
+export const defaultMicrogreensBuyingOptions: BuyingOption[] = [
+  {
+    id: 'single-tray',
+    label: 'Single Live Tray',           // Name shown in dropdown
+    price: 1100,                            // Price in LKR
+    bestFor: 'One-time trial or a healthy gift',  // Helper text
+    priceSubtext: 'One-time purchase',     // Small text under price
+    isMostPopular: false                   // Adds "Most Popular" badge
+  },
+  {
+    id: 'intro-offer',
+    label: 'Introductory Offer',
+    price: 850,
+    bestFor: 'First-time customers (Limited Batch)',
+    priceSubtext: 'Limited time for first-time customers',
+    isMostPopular: false
+  },
+  {
+    id: 'monthly-subscription',
+    label: 'Monthly Subscription',
+    price: 3400,
+    bestFor: '4 Trays (1 per week) - Best Value',
+    priceSubtext: 'Includes 4 trays (1 per week)',
+    isMostPopular: true  // ← This is the default selected option
+  }
+];
+```
+
+**Key Rules:**
+- Only one option should have `isMostPopular: true`
+- The option with `isMostPopular: true` is automatically selected by default
+- The dropdown only shows option names (no prices inside dropdown)
+- Price updates instantly when user changes selection
+- "Most Popular" badge appears as a small, premium tag
 
 ---
 
-## ⚙️ Configuration Guide
+### 3. Want to Change Contact Information?
 
-### 1. Site Branding & Contact Info
-
-All site-wide settings are in `src/data/siteConfig.ts`:
+**Where to edit:** `src/data/siteConfig.ts`
 
 ```typescript
 export const siteConfig = {
@@ -71,394 +129,119 @@ export const siteConfig = {
   siteUrl: 'https://yakra.lk',
   heroImage: '/media/hero.svg',
 
-  // 📧 Contact Information
   contact: {
-    email: 'hello@yakra.lk',
-    phoneDisplay: '+94 77 123 4567',
-    address: 'Sri Lanka'
+    email: 'hello@yakra.lk',              // ← Edit email
+    phoneDisplay: '+94 77 123 4567',       // ← Edit phone (shown to users)
+    address: 'Sri Lanka'                   // ← Edit address
   },
 
-  // 🔗 Social Media Links
   social: {
-    instagram: 'https://instagram.com/yakra',
-    facebook: 'https://facebook.com/yakra'
+    instagram: 'https://instagram.com/yakra',  // ← Edit Instagram
+    facebook: 'https://facebook.com/yakra'      // ← Edit Facebook
   }
 } as const;
 ```
 
-#### Changing Contact Details
+**What changes automatically:**
+- Email appears in footer and contact page
+- Phone appears in footer
+- Address appears in footer and contact page
+- Social links appear in footer and contact page
 
-**Email Address:**
-```typescript
-contact: {
-  email: 'your-email@example.com',  // ← Change this
-  // ...
-}
-```
+---
 
-**Phone Display:**
-```typescript
-contact: {
-  phoneDisplay: '+94 77 987 6543',  // ← Change this (shown to users)
-  // ...
-}
-```
+### 4. Want to Change the WhatsApp Number?
 
-**Note:** For WhatsApp functionality, update the centralized WhatsApp number in `src/data/whatsapp.ts` (see section 3 below).
-
-**Physical Address:**
-```typescript
-contact: {
-  address: '123 Street Name, Colombo, Sri Lanka',  // ← Change this
-  // ...
-}
-```
-
-#### Changing Instagram URL
-
-Navigate to `src/data/siteConfig.ts` and update:
+**Where to edit:** `src/data/whatsapp.ts`
 
 ```typescript
-social: {
-  instagram: 'https://instagram.com/yourusername',  // ← Change this
-  facebook: 'https://facebook.com/yourpage'
-}
+// WhatsApp number in E.164 format without the + symbol
+// Example: For +94 77 123 4567, use: '94771234567'
+export const WHATSAPP_NUMBER = '94771234567';
 ```
 
-The Instagram URL is used in two places:
-1. **Contact page** (`src/app/contact/page.tsx`) - Shown in the contact section
-2. **Footer** (`src/components/SiteFooter.tsx`) - Social media icon link
+**Where it's used:**
+- Product page "Order via WhatsApp" buttons
+- Footer WhatsApp link
+- Contact page WhatsApp link
 
-#### Changing Facebook URL
+---
 
-Navigate to `src/data/siteConfig.ts` and update:
+### 5. Want to Change the Hero Image (Home Page Background)?
 
-```typescript
-social: {
-  instagram: 'https://instagram.com/yourusername',
-  facebook: 'https://facebook.com/yourpage'  // ← Change this
-}
-```
-
-The Facebook URL is used in two places:
-1. **Contact page** (`src/app/contact/page.tsx`) - Shown in the contact section
-2. **Footer** (`src/components/SiteFooter.tsx`) - Social media icon link
-
-**Note:** You don't need to edit the footer or contact page files directly. Just update `siteConfig.ts` and changes will reflect everywhere automatically.
-
-#### Changing Footer Contact Info
-
-The footer automatically pulls contact info from `siteConfig.ts`. To change what appears in the footer:
-
-```typescript
-// In src/data/siteConfig.ts
-contact: {
-  email: 'new-email@example.com',        // ← Footer will use this
-  phoneDisplay: '+94 11 234 5678',        // ← Footer will use this
-  address: 'New Address, Sri Lanka'       // ← Footer will use this
-}
-```
-
-To change the WhatsApp number used by the footer link, update `WHATSAPP_NUMBER` in `src/data/whatsapp.ts`.
-
-### 2. Hero Image
-
-The hero section background image is set in `src/data/siteConfig.ts`:
+**Where to edit:** `src/data/siteConfig.ts`
 
 ```typescript
 heroImage: '/media/hero.svg',  // ← Change this filename
 ```
 
-**Steps to change:**
-1. Place your new hero image in `public/media/`
-2. Update the `heroImage` value with your new filename
-3. The image can be SVG, JPG, PNG, or WebP format
+**Steps:**
+1. Place your new image in `public/media/`
+2. Update the filename in `siteConfig.ts`
+3. Hero is set to `100dvh` height with full background cover
 
-### 3. WhatsApp Number Configuration
+**Image requirements:**
+- SVG, JPG, PNG, or WebP format
+- The image scales nicely on mobile and desktop
+- Background covers entire hero area automatically
 
-All WhatsApp links throughout the site use a single centralized configuration in `src/data/whatsapp.ts`:
+---
 
-```typescript
-// WhatsApp number in E.164 format without the + symbol
-// Format: country code + number (e.g., 94771234567 for Sri Lanka)
-export const WHATSAPP_NUMBER = '94771234567';
-```
+### 6. Want to Edit Site-Wide Styling (Colors, etc.)?
 
-**To change the WhatsApp number:**
-1. Open `src/data/whatsapp.ts`
-2. Update the `WHATSAPP_NUMBER` constant with your number in international format (no + symbol)
-3. Example: For Sri Lankan number +94 77 123 4567, use: `'94771234567'`
-
-This number is automatically used for:
-- WhatsApp Order buttons on product pages (with buying options)
-- WhatsApp inquiry buttons on regular product pages
-- WhatsApp links in the footer
-- WhatsApp links on the contact page
-- Contact form WhatsApp submission
-
-### 4. Product Management
-
-All product data is stored in `src/data/products.ts`. No database needed!
-
-#### Adding a New Product
+**Where to edit:** `tailwind.config.ts`
 
 ```typescript
-{
-  id: 'yakra-new-product',
-  slug: 'new-product',
-  name: 'New Product Name',
-  category: 'Dehydrated Powders',  // or 'Microgreens'
-  tags: ['tag1', 'tag2', 'tag3'],
-  shortDescription: 'Brief one-line description',
-  description: 'Full detailed description of the product...',
-  priceLkr: 4500,
-  images: ['/products/new-product/1.svg', '/products/new-product/2.svg'],
-  usage: 'How to use this product...',
-  storage: 'Storage instructions...',
-  shelfLife: 'Shelf life information...',
-  featured: true  // Optional: show on homepage
+theme: {
+  extend: {
+    colors: {
+      forest: {
+        950: '#0a120f',  // Main background
+        100: '#e8ece9',  // Primary text
+        // ... other forest shades
+      },
+      accent: {
+        500: '#84a98c',  // Accent color (buttons, links)
+      }
+    }
+  }
 }
 ```
 
-#### Product Images
+---
 
-1. Create a folder in `public/products/` with the product slug: `public/products/new-product/`
-2. Add your product images to that folder
-3. Reference them in the product's `images` array
+### 7. Want to Change WhatsApp Message Format?
 
-#### Product Categories
+**Where to edit:** `src/components/BuyingOptionSelector.tsx`
 
-Available categories are defined in `src/data/products.ts`:
+Find the `onOrder` function:
 
 ```typescript
-export type ProductCategory = 'Dehydrated Powders' | 'Microgreens';
-export const categories: ProductCategory[] = ['Dehydrated Powders', 'Microgreens'];
-```
+function onOrder() {
+  const url = typeof window !== 'undefined' ? window.location.href : '';
 
-To add a new category:
-1. Update the `ProductCategory` type
-2. Add the category name to the `categories` array
+  const message = `I'd like to order ${selectedOption.label} of ${productName}.\nProduct: ${url}`;
 
-#### Search Tags
-
-The search functionality uses product tags. Make sure to include relevant tags:
-
-```typescript
-tags: ['moringa', 'green', 'smoothie', 'immunity', 'energy'],
-```
-
-Users can search by any of these tags on the organics page and product detail pages.
-
-#### Buying Options (Pricing Plans) + WhatsApp Ordering
-
-Some products (e.g., microgreens) support **buying options** (pricing plans). When a product has buying options:
-- The product page shows a **“Choose an option”** selector
-- The displayed price updates instantly when the option changes
-- The **Order on WhatsApp** button opens WhatsApp with a pre-filled message containing:
-  - selected option name
-  - product name
-  - current page URL
-  - selected price
-
-Buying options are defined in `src/data/products.ts` using this structure:
-
-```ts
-export type BuyingOption = {
-  id: string;
-  label: string;
-  price: number;
-  bestFor: string;
-  priceSubtext: string;
-  isMostPopular?: boolean;
-};
-```
-
-A product can include options like this:
-
-```ts
-import { defaultMicrogreensBuyingOptions } from '@/data/products';
-
-{
-  id: 'yakra-sunflower-microgreens',
-  slug: 'sunflower-microgreens',
-  name: 'Sunflower Microgreens',
-  category: 'Microgreens',
-  tags: ['microgreens', 'sunflower'],
-  shortDescription: '...',
-  description: '...',
-  priceLkr: 1150,
-  buyingOptions: defaultMicrogreensBuyingOptions,
-  images: ['/products/sunflower-microgreens/1.svg'],
-  usage: '...',
-  storage: '...',
-  shelfLife: '...'
+  window.open(getWhatsAppUrl(message), '_blank', 'noreferrer');
 }
 ```
 
-To add/edit the options and prices:
-1. Open `src/data/products.ts`
-2. Edit `defaultMicrogreensBuyingOptions` (or create a new options array for a specific product)
-3. Update:
-   - `label` (what shows in the selector)
-   - `bestFor` (helper text under the selector)
-   - `price` (used for the dynamic price display)
-   - `priceSubtext` (small text shown under the price)
-   - `isMostPopular` (adds a subtle “Most Popular” badge)
-
-#### WhatsApp message generation
-
-The WhatsApp order message is generated on click using this exact format:
-
-```text
-Hi! I'd like to order the {option} of {productName}.
-Price: LKR {price}
-Product: {url}
+**Current format:**
+```
+I'd like to order {Option Name} of {Product Name}.
+Product: {URL}
 ```
 
-Line breaks are preserved by URL-encoding the message before opening WhatsApp.
+Line breaks are preserved with `\n`.
 
 ---
 
-## 📄 Pages Overview
+### 8. Want to Change Navigation Links?
 
-### Home Page (`/`)
-- Hero section with 100dvh height
-- Featured products (4 items)
-- Quick links to Organics and Glamp sections
-
-### Organics Page (`/organics`)
-- Full product catalog with search and filters
-- Search by product name or tags
-- Filter by category
-- Product cards with images and pricing:
-  - Products **with** buying options: display all 3 prices + "Most Popular" badge
-  - Products **without** buying options: display single price
-
-### Product Detail Page (`/organics/[slug]`)
-- Dynamic pages generated from product data
-- Product gallery with multiple images
-- Full description, usage, storage, and shelf-life info
-- Buying option selector (for products with pricing plans) with instant price updates
-- **Order on WhatsApp** button with a pre-filled message (includes option + price + page URL)
-- Search all products functionality
-- Related products section (shows 3 products from same category)
-
-### Contact Page (`/contact`)
-- Contact form for inquiries
-- Direct email and WhatsApp links
-- Social media links (Instagram, Facebook)
-- Business address and phone display
-- Email/display info from `src/data/siteConfig.ts`
-- WhatsApp number for links from `src/data/whatsapp.ts`
-
-### Footer
-- Site-wide footer on all pages
-- Quick navigation links
-- Contact information (email, WhatsApp, address)
-- Social media icons (Instagram, Facebook)
-- Email/display info from `src/data/siteConfig.ts`
-- WhatsApp number for links from `src/data/whatsapp.ts`
-
----
-
-## 🛠️ Development Notes
-
-### Client vs Server Components
-
-- **Default:** All pages are server components for better SEO
-- **Client components** (marked with `'use client'`) are used for:
-  - Interactive search functionality
-  - Contact form with state
-  - Product filtering
-
-### SEO & Metadata
-
-Each page includes proper metadata for SEO:
-- Title and description
-- Open Graph tags for social sharing
-- Structured data (JSON-LD) for products
-- Sitemap and robots.txt
-
-### Styling
-
-- Uses Tailwind CSS utility classes
-- Custom colors defined in `tailwind.config.ts`
-- Follows the dark forest aesthetic
-- Responsive design for mobile, tablet, and desktop
-
----
-
-## 📱 Key Features
-
-### Search Functionality
-- Search by product name
-- Search by tags (e.g., "moringa", "smoothie", "fresh")
-- Category filtering
-- Available on both organics listing and product detail pages
-
-### Related Products
-- Automatically shows 3 related products on product detail pages
-- Related based on category (same category as current product)
-- Appears before the footer
-
-### Contact Integration
-- WhatsApp integration with pre-filled messages (ordering + inquiries)
-- Email integration with pre-filled subjects and body
-- WhatsApp number centrally managed in `src/data/whatsapp.ts`
-
----
-
-## 🚀 Deployment
-
-This is a frontend-only site and can be deployed to:
-- **Vercel** (recommended for Next.js)
-- **Netlify**
-- **Any static hosting**
-
-### Deploy to Vercel
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Environment Variables (Optional)
-
-No environment variables are required for basic functionality. All configuration is in `src/data/siteConfig.ts`.
-
----
-
-## 📝 Common Tasks
-
-### Update Homepage Featured Products
-
-Edit `src/data/products.ts` and set `featured: true` on products you want to show:
+**Where to edit:** `src/components/SiteHeader.tsx`
 
 ```typescript
-{
-  // ... product details
-  featured: true  // ← Add this to show on homepage
-}
-```
-
-### Change Hero Section Height
-
-The hero section is currently set to `100dvh` (full viewport height). To change this, edit `src/app/page.tsx`:
-
-```typescript
-<section className="relative min-h-[100dvh] overflow-hidden">
-  // ↑ Change 100dvh to your preferred height (e.g., 80dvh, 600px, etc.)
-```
-
-### Customize Navigation Links
-
-The footer navigation links are in `src/components/SiteFooter.tsx`:
-
-```typescript
-const links = [
+const navItems = [
   { href: '/', label: 'Home' },
   { href: '/organics', label: 'Organics' },
   { href: '/glamp', label: 'Glamp' },
@@ -469,35 +252,153 @@ const links = [
 
 ---
 
-## 🐛 Troubleshooting
+### 9. Product Page Content Sections
 
-### Images Not Showing
-- Ensure images are in the correct folder under `public/`
-- Check file paths in configuration
-- Verify image formats are supported (SVG, JPG, PNG, WebP)
+The product page displays these sections in order:
 
-### WhatsApp Link Not Working
-- Check that `WHATSAPP_NUMBER` in `src/data/whatsapp.ts` is in the correct format (international format without + symbol)
-- Example: `94771234567` (for Sri Lanka)
-- Verify the number doesn't have spaces or special characters
-- Test by clicking a WhatsApp link to see if it opens properly
-
-### Search Not Finding Products
-- Check that tags are properly set on products
-- Ensure search query matches product name or tags exactly (case-insensitive)
-- Clear browser cache if needed
+1. **Back button** - Links to /organics
+2. **Search bar** - Full product search (placed after navbar)
+3. **Product gallery** - Shows product images
+4. **Product name** - From product.name
+5. **Category badge & tags**
+6. **Buying option selector** - If product has buyingOptions
+7. **Description** - From product.description
+8. **Nutritional Benefits** - From product.nutritionalBenefits (optional)
+9. **How to Enjoy** - From product.usage
+10. **Storage & Handling** - From product.storage
+11. **Shelf-life** - From product.shelfLife
+12. **Need help choosing?** - Contact CTA section
+13. **Related products** - Shows products from same category
 
 ---
 
-## 📄 License
+## 📂 Project Structure (For Reference)
+
+```
+├── public/                    # Static assets
+│   ├── media/                 # Brand images (hero, contact, icons)
+│   └── products/              # Product images
+│       └── red-amaranth-microgreens/  # Product folders (by slug)
+├── src/
+│   ├── app/                   # Next.js pages
+│   │   ├── about/             # About page
+│   │   ├── contact/           # Contact page
+│   │   ├── glamp/             # Coming soon page
+│   │   ├── organics/          # Product listing & search
+│   │   │   └── [slug]/        # Individual product pages
+│   │   ├── layout.tsx         # Root layout
+│   │   └── page.tsx           # Home page (hero here)
+│   ├── components/            # Reusable UI components
+│   │   ├── ProductCard.tsx    # Product card for listings
+│   │   ├── BuyingOptionSelector.tsx  # Price plan selector
+│   │   ├── SiteHeader.tsx     # Navigation
+│   │   └── SiteFooter.tsx     # Footer
+│   └── data/                  # ALL editable data
+│       ├── products.ts        # ← Products & buying options
+│       ├── siteConfig.ts      # ← Site branding & contact info
+│       └── whatsapp.ts        # ← WhatsApp number
+```
+
+---
+
+## 🎨 Design System
+
+- **Theme:** Dark forest aesthetic
+- **Primary background:** `forest-950` (#0a120f)
+- **Primary text:** `forest-100` (#e8ece9)
+- **Accent color:** `accent-500` (#84a98c)
+- **Hero height:** `100dvh` (full viewport height)
+- **Product card aspect ratio:** 4:3
+- **Responsive:** Mobile-first design
+
+---
+
+## 📄 Pages Overview
+
+| Page | URL | Purpose |
+|------|-----|---------|
+| Home | `/` | Hero + featured products + section links |
+| Organics | `/organics` | Full product catalog with search & filters |
+| Product Detail | `/organics/[slug]` | Individual product with buying options |
+| Contact | `/contact` | Contact form + contact info |
+| About | `/about` | About page |
+| Glamp | `/glamp` | Coming soon page |
+
+---
+
+## 🛠️ Key Features
+
+### Search Functionality
+- Search by product name
+- Search by tags (e.g., "red", "antioxidant", "fresh")
+- Filter by category
+- Available on organics page and product detail pages
+
+### WhatsApp Ordering
+- "Order via WhatsApp" button on product pages
+- Pre-filled message includes:
+  - Selected option label
+  - Product name
+  - Current page URL
+- Message format:
+  ```
+  I'd like to order {Option} of {Product}.
+  Product: {URL}
+  ```
+
+### Buying Options
+- Dropdown selector shows only option names
+- Price updates instantly on selection
+- "Most Popular" badge highlights the best option
+- Default selection is the option with `isMostPopular: true`
+
+---
+
+## 🚀 Deployment
+
+This is a frontend-only site. Deploy to:
+
+- **Vercel** (recommended for Next.js)
+- **Netlify**
+- **Any static hosting**
+
+### Deploy to Vercel
+
+```bash
+npm i -g vercel
+vercel
+```
+
+No environment variables required—all config is in code.
+
+---
+
+## ❓ Common Questions
+
+### How do I add a new product?
+Edit `src/data/products.ts`, add to the `products` array. See section 1 above.
+
+### How do I change prices?
+Edit `defaultMicrogreensBuyingOptions` in `src/data/products.ts`. See section 2 above.
+
+### How do I add more images to a product?
+1. Add images to `public/products/your-product-slug/`
+2. Update the `images` array in the product data
+
+### How do I remove the "Most Popular" badge?
+Set `isMostPopular: false` on all options, or remove the property entirely.
+
+### Where do I edit the email address?
+Edit `src/data/siteConfig.ts`. See section 3 above.
+
+### Where do I change the WhatsApp number?
+Edit `src/data/whatsapp.ts`. See section 4 above.
+
+---
+
+## 📝 License
 
 This project is proprietary and confidential.
-
----
-
-## 🤝 Support
-
-For questions or issues, refer to the code comments or contact the development team.
 
 ---
 

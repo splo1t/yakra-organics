@@ -23,6 +23,7 @@ export type Product = {
   usage: string;
   storage: string;
   shelfLife: string;
+  nutritionalBenefits?: string;
   featured?: boolean;
 };
 
@@ -33,22 +34,22 @@ export const defaultMicrogreensBuyingOptions: BuyingOption[] = [
   {
     id: 'single-tray',
     label: 'Single Live Tray',
-    price: 1150,
-    bestFor: 'One-time trial / Gift',
+    price: 1100,
+    bestFor: 'One-time trial or a healthy gift',
     priceSubtext: 'One-time purchase'
   },
   {
     id: 'intro-offer',
     label: 'Introductory Offer',
-    price: 950,
-    bestFor: 'First-time customers (Limited time)',
+    price: 850,
+    bestFor: 'First-time customers (Limited Batch)',
     priceSubtext: 'Limited time for first-time customers'
   },
   {
     id: 'monthly-subscription',
     label: 'Monthly Subscription',
-    price: 3600,
-    bestFor: '4 Trays (1 per week) — Most Popular',
+    price: 3400,
+    bestFor: '4 Trays (1 per week) - Best Value',
     priceSubtext: 'Includes 4 trays (1 per week)',
     isMostPopular: true
   }
@@ -56,109 +57,21 @@ export const defaultMicrogreensBuyingOptions: BuyingOption[] = [
 
 export const products: Product[] = [
   {
-    id: 'yakra-moringa-leaf-powder',
-    slug: 'moringa-leaf-powder',
-    name: 'Moringa Leaf Powder',
-    category: 'Dehydrated Powders',
-    tags: ['moringa', 'green', 'smoothie', 'immunity', 'energy'],
-    shortDescription: 'A clean, vibrant green powder made from gently dehydrated moringa leaves.',
-    description:
-      'Yakra Moringa Leaf Powder is produced from carefully selected leaves, dried at low temperatures to preserve color and aroma. Ideal for daily wellness routines—smoothies, juices, yogurt, or warm water.',
-    priceLkr: 3900,
-    images: ['/products/moringa-leaf-powder/1.svg', '/products/moringa-leaf-powder/2.svg'],
-    usage:
-      'Add 1–2 teaspoons to smoothies, fruit juice, yogurt, or warm water. Start small and adjust to taste.',
-    storage:
-      'Keep sealed in a cool, dry place away from sunlight. Use a dry spoon to avoid moisture.',
-    shelfLife: 'Best within 9–12 months from the packed date when stored properly.',
-    featured: true
-  },
-  {
-    id: 'yakra-ginger-powder',
-    slug: 'ginger-powder',
-    name: 'Ginger Powder',
-    category: 'Dehydrated Powders',
-    tags: ['ginger', 'spice', 'tea', 'warming', 'digestive'],
-    shortDescription: 'Aromatic ginger powder with a warm, premium finish—perfect for tea and cooking.',
-    description:
-      'Yakra Ginger Powder is finely milled from dehydrated ginger for a consistent texture and bold aroma. Great for tea blends, marinades, soups, and everyday cooking.',
-    priceLkr: 3200,
-    images: ['/products/ginger-powder/1.svg'],
-    usage: 'Mix into tea, honey water, soups, or curries. Start with 1/4–1/2 teaspoon per serving.',
-    storage:
-      'Store airtight in a cool, dry cupboard. Avoid moisture and strong odors for best freshness.',
-    shelfLife: 'Best within 9–12 months from the packed date when stored properly.'
-  },
-  {
-    id: 'yakra-beetroot-powder',
-    slug: 'beetroot-powder',
-    name: 'Beetroot Powder',
-    category: 'Dehydrated Powders',
-    tags: ['beetroot', 'smoothie', 'latte', 'color', 'preworkout'],
-    shortDescription: 'Naturally rich color and earthy sweetness—beautiful in smoothies and lattes.',
-    description:
-      'Yakra Beetroot Powder brings naturally vibrant color to your drinks and recipes. Use it for smoothies, yogurt bowls, or a café-style beet latte at home.',
-    priceLkr: 3500,
-    images: ['/products/beetroot-powder/1.svg', '/products/beetroot-powder/2.svg'],
-    usage:
-      'Blend 1 teaspoon into smoothies or mix into warm milk for a beet latte. Adjust sweetness as desired.',
-    storage:
-      'Reseal tightly after use and keep away from humidity. A dry spoon helps maintain quality.',
-    shelfLife: 'Best within 9–12 months from the packed date when stored properly.',
-    featured: true
-  },
-  {
-    id: 'yakra-sunflower-microgreens',
-    slug: 'sunflower-microgreens',
-    name: 'Sunflower Microgreens',
+    id: 'yakra-red-amaranth-microgreens',
+    slug: 'red-amaranth-microgreens',
+    name: 'Red Amaranth Microgreens: The Vibrant Superfood',
     category: 'Microgreens',
-    tags: ['microgreens', 'sunflower', 'salad', 'crunch', 'fresh'],
-    shortDescription: 'Crunchy, nutty microgreens—premium freshness for salads, bowls, and sandwiches.',
-    description:
-      'Yakra Sunflower Microgreens add a crisp texture and clean flavor to your meals. Handled with care to keep them fresh, vibrant, and ready to elevate everyday dishes.',
-    priceLkr: 1150,
+    tags: ['microgreens', 'red', 'amaranth', 'antioxidant', 'superfood', 'fresh'],
+    shortDescription: 'Famous for their stunning deep fuchsia-red color and delicate, earthy flavor.',
+    description: 'Red Amaranth microgreens are the "jewels" of the microgreen world. Famous for their stunning deep fuchsia-red color and delicate, earthy flavor, they are a favorite for health enthusiasts who refuse to compromise on taste or aesthetics.',
+    nutritionalBenefits: `Massive Antioxidant Boost: High in Betacyanins, the pigments that give them their red color, which help fight oxidative stress and boost immunity.\nBone Strength: An exceptional source of Vitamin K, vital for bone health and proper blood clotting.\nSkin & Vision: Rich in Vitamins C and E, which promote radiant skin and support long-term eye health.\nNatural Energy: Packed with Iron, Magnesium, and Potassium to support heart health and maintain energy levels throughout the day.\nThe 40x Rule: Contains up to 40 times more vital nutrients compared to the mature amaranth plant.`,
+    priceLkr: 1100,
     buyingOptions: defaultMicrogreensBuyingOptions,
-    images: ['/products/sunflower-microgreens/1.svg'],
-    usage: 'Rinse lightly if needed and add just before serving. Perfect for salads, wraps, bowls, and eggs.',
-    storage:
-      'Keep refrigerated and dry. Do not wash until ready to use. Avoid compressing to maintain texture.',
-    shelfLife: 'Best enjoyed within 5–7 days under refrigeration.'
-  },
-  {
-    id: 'yakra-radish-microgreens',
-    slug: 'radish-microgreens',
-    name: 'Radish Microgreens',
-    category: 'Microgreens',
-    tags: ['microgreens', 'radish', 'peppery', 'garnish', 'fresh'],
-    shortDescription: 'Peppery, bold microgreens—an elegant garnish with real flavor.',
-    description:
-      'Yakra Radish Microgreens offer a clean, peppery kick. Ideal for finishing dishes—soups, salads, sushi bowls, and modern Sri Lankan plates.',
-    priceLkr: 1150,
-    buyingOptions: defaultMicrogreensBuyingOptions,
-    images: ['/products/radish-microgreens/1.svg', '/products/radish-microgreens/2.svg'],
-    usage:
-      'Use as a garnish or mix into salads. Add at the end to keep the texture crisp and the flavor fresh.',
-    storage:
-      'Refrigerate in the original container. Keep dry and avoid condensation for best results.',
+    images: ['/products/red-amaranth-microgreens/1.svg'],
+    usage: `The Signature Garnish: Sprinkle over creamy soups, pasta, or grilled fish to add a pop of vibrant color.\nPremium Toasts: Top your avocado or cream cheese toast with a generous handful of red amaranth for a gourmet breakfast.\nPower Salads: Mix with other greens for a nutrient-dense base or use as a colorful topper for a "Yakra" style power bowl.\nSmoothie Boost: Blend into your morning smoothie for an invisible nutrient kick without changing the flavor profile.`,
+    storage: `Temperature: Store harvested greens in the refrigerator at 1°C to 4°C.\nMoisture Control: Keep them in an airtight container lined with a dry paper towel to absorb excess moisture and prevent wilting.\nThe Live Advantage: If you have the Yakra Live Tray, harvest only what you need. Keep the tray in a cool spot with indirect sunlight for the freshest experience.\nRinse Before Use: Only rinse gently in cold water right before consumption to maintain maximum shelf life.`,
     shelfLife: 'Best enjoyed within 5–7 days under refrigeration.',
     featured: true
-  },
-  {
-    id: 'yakra-basil-microgreens',
-    slug: 'basil-microgreens',
-    name: 'Basil Microgreens',
-    category: 'Microgreens',
-    tags: ['microgreens', 'basil', 'aromatic', 'italian', 'premium'],
-    shortDescription: 'Aromatic basil microgreens—luxury flavor for pasta, pizza, and salads.',
-    description:
-      'Yakra Basil Microgreens bring a refined aroma and a bright herbal finish. Great for contemporary plating and premium home cooking.',
-    priceLkr: 1150,
-    buyingOptions: defaultMicrogreensBuyingOptions,
-    images: ['/products/basil-microgreens/1.svg'],
-    usage: 'Scatter on finished dishes or mix into salads. Use as a final touch for maximum aroma.',
-    storage:
-      'Keep refrigerated, dry, and sealed. Avoid washing until serving to maintain quality.',
-    shelfLife: 'Best enjoyed within 5–7 days under refrigeration.'
   }
 ];
 
