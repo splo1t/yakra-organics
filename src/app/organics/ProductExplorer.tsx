@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 
 import { ProductCard } from '@/components/ProductCard';
 import type { Product, ProductCategory } from '@/data/products';
+import { getSearchSuggestions, getPopularSearchTerms } from '@/lib/search';
 
 function normalize(value: string) {
   return value.trim().toLowerCase();
@@ -18,6 +19,16 @@ export function ProductExplorer({
 }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<ProductCategory | 'All'>('All');
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'popularity'>('name');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const searchRef = useRef<HTMLDivElement>(null);
+  
+  const suggestions = useMemo(() => {
+    return getSearchSuggestions(products, query);
+  }, [products, query]);
+  
+  const popularTerms = getPopularSearchTerms();
 
   const filtered = useMemo(() => {
     const q = normalize(query);
@@ -32,20 +43,94 @@ export function ProductExplorer({
     });
   }, [products, query, category]);
 
+  const sortedProducts = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === 'price') {
+        const priceA = a.buyingOptions?.[0]?.price || a.priceLkr;
+        const priceB = b.buyingOptions?.[0]?.price || b.priceLkr;
+        return priceA - priceB;
+      } else if (sortBy === 'popularity') {
+        return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+      }
+      return 0;
+    });
+  }, [filtered, sortBy]);
+
   return (
     <div>
       <div className="grid gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 shadow-soft sm:grid-cols-3">
-        <div className="sm:col-span-2">
+        <div className="sm:col-span-2" ref={searchRef}>
           <label className="text-xs font-medium text-forest-100/70" htmlFor="search">
             Search
           </label>
-          <input
-            id="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
-            className="mt-2 w-full rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 placeholder:text-forest-100/40 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
-          />
+          <div className="relative mt-2">
+            <input
+              id="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault();
+                  setActiveSuggestionIndex(prev => Math.min(prev + 1, suggestions.length - 1));
+                } else if (e.key === 'ArrowUp') {
+                  e.preventDefault();
+                  setActiveSuggestionIndex(prev => Math.max(prev - 1, -1));
+                } else if (e.key === 'Enter' && activeSuggestionIndex >= 0) {
+                  e.preventDefault();
+                  setQuery(suggestions[activeSuggestionIndex]);
+                  setActiveSuggestionIndex(-1);
+                  setShowSuggestions(false);
+                }
+              }}
+              placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
+              className="w-full rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 placeholder:text-forest-100/40 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
+            />
+            {showSuggestions && (suggestions.length > 0 || query.length === 0) && (
+              <div className="absolute z-10 mt-1 w-full rounded-md border border-white/10 bg-forest-950/90 shadow-lg">
+                {query.length === 0 ? (
+                  <div className="p-3">
+                    <p className="text-xs text-forest-100/70 mb-2">Popular searches:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {popularTerms.map(term => (
+                        <button
+                          key={term}
+                          type="button"
+                          onClick={() => {
+                            setQuery(term);
+                            setShowSuggestions(false);
+                          }}
+                          className="rounded-full bg-forest-800/50 px-3 py-1 text-xs text-forest-100 hover:bg-forest-700/50"
+                        >
+                          {term}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="max-h-48 overflow-y-auto">
+                    {suggestions.map((suggestion, index) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => {
+                          setQuery(suggestion);
+                          setShowSuggestions(false);
+                        }}
+                        onMouseEnter={() => setActiveSuggestionIndex(index)}
+                        className={`w-full px-3 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-accent-500/20' : 'hover:bg-forest-800/50'} text-forest-100`}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div>
@@ -68,34 +153,56 @@ export function ProductExplorer({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="text-sm text-forest-100/70">
-          Showing <span className="text-forest-100">{filtered.length}</span> of{' '}
-          <span className="text-forest-100">{products.length}</span>
+          Showing <span className="text-forest-100">{sortedProducts.length}</span> of{' '}
+          <span className="text-forest-100">{products.length}</span> products
         </div>
-        {query ? (
-          <button
-            type="button"
-            onClick={() => setQuery('')}
-            className="text-sm text-accent-500 hover:text-accent-500/90"
+        <div className="flex flex-wrap items-center gap-3">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'popularity')}
+            className="rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
           >
-            Clear search
-          </button>
-        ) : null}
+            <option value="name">Sort by: Name</option>
+            <option value="price">Sort by: Price (Low to High)</option>
+            <option value="popularity">Sort by: Popularity</option>
+          </select>
+          {query ? (
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              className="text-sm text-accent-500 hover:text-accent-500/90"
+            >
+              Clear search
+            </button>
+          ) : null}
+        </div>
       </div>
 
-      {filtered.length ? (
+      {sortedProducts.length ? (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
+          {sortedProducts.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
       ) : (
         <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-8 text-center">
-          <div className="font-display text-2xl text-forest-100">No results</div>
+          <div className="font-display text-2xl text-forest-100">No results found</div>
           <p className="mt-2 text-sm text-forest-100/70">
-            Try a different keyword or remove filters.
+            {query ? 'Try different keywords like "moringa", "smoothie", or "fresh"' : 'No products match your filters. Try removing some filters.'}
           </p>
+          {query && (
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                className="text-sm text-accent-500 hover:text-accent-500/90"
+              >
+                Clear search and show all products
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
