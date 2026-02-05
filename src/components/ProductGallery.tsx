@@ -54,9 +54,6 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
           ) : null}
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-forest-950/50 via-transparent to-transparent" />
-        <div className="absolute bottom-3 right-3 rounded-md bg-forest-950/70 px-3 py-2 text-xs text-forest-100/80 ring-1 ring-white/10">
-          Click to view
-        </div>
       </button>
 
       {safeImages.length > 1 ? (
