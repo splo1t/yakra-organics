@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useMemo, useState, useRef } from 'react';
 
 import { ProductCard } from '@/components/ProductCard';
 import type { Product, ProductCategory } from '@/data/products';
@@ -22,12 +22,13 @@ export function ProductSearch({
   const [sortBy, setSortBy] = useState<'name' | 'price' | 'popularity'>('name');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
+  const [hasSearched, setHasSearched] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  
+
   const suggestions = useMemo(() => {
     return getSearchSuggestions(products, query);
   }, [products, query]);
-  
+
   const popularTerms = getPopularSearchTerms();
 
   const filtered = useMemo(() => {
@@ -58,11 +59,29 @@ export function ProductSearch({
     });
   }, [filtered, sortBy]);
 
+  const shouldShowResults = hasSearched && (query.trim() !== '' || category !== 'All');
+
+  const handleSearch = () => {
+    setHasSearched(true);
+    setShowSuggestions(false);
+  };
+
+  const handleSelectSuggestion = (suggestion: string) => {
+    setQuery(suggestion);
+    setHasSearched(true);
+    setShowSuggestions(false);
+  };
+
+  const handleClearSearch = () => {
+    setQuery('');
+    setHasSearched(false);
+  };
+
   return (
     <div>
       <h2 className="font-display text-3xl text-forest-100">Search Products</h2>
       <p className="mt-2 text-sm leading-relaxed text-forest-100/70">
-        Browse all products by name or tags. Find what you’re looking for.
+        Browse all products by name or tags. Find what you&apos;re looking for.
       </p>
 
       <div className="mt-6 grid gap-3 rounded-2xl border border-white/5 bg-white/5 p-4 shadow-soft sm:grid-cols-3">
@@ -84,11 +103,14 @@ export function ProductSearch({
                 } else if (e.key === 'ArrowUp') {
                   e.preventDefault();
                   setActiveSuggestionIndex(prev => Math.max(prev - 1, -1));
-                } else if (e.key === 'Enter' && activeSuggestionIndex >= 0) {
+                } else if (e.key === 'Enter') {
                   e.preventDefault();
-                  setQuery(suggestions[activeSuggestionIndex]);
-                  setActiveSuggestionIndex(-1);
-                  setShowSuggestions(false);
+                  if (activeSuggestionIndex >= 0) {
+                    handleSelectSuggestion(suggestions[activeSuggestionIndex]);
+                    setActiveSuggestionIndex(-1);
+                  } else {
+                    handleSearch();
+                  }
                 }
               }}
               placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
@@ -104,10 +126,7 @@ export function ProductSearch({
                         <button
                           key={term}
                           type="button"
-                          onClick={() => {
-                            setQuery(term);
-                            setShowSuggestions(false);
-                          }}
+                          onClick={() => handleSelectSuggestion(term)}
                           className="rounded-full bg-forest-800/50 px-3 py-1 text-xs text-forest-100 hover:bg-forest-700/50"
                         >
                           {term}
@@ -121,10 +140,7 @@ export function ProductSearch({
                       <button
                         key={suggestion}
                         type="button"
-                        onClick={() => {
-                          setQuery(suggestion);
-                          setShowSuggestions(false);
-                        }}
+                        onClick={() => handleSelectSuggestion(suggestion)}
                         onMouseEnter={() => setActiveSuggestionIndex(index)}
                         className={`w-full px-3 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-accent-500/20' : 'hover:bg-forest-800/50'} text-forest-100`}
                       >
@@ -145,7 +161,10 @@ export function ProductSearch({
           <select
             id="category"
             value={category}
-            onChange={(e) => setCategory(e.target.value as ProductCategory | 'All')}
+            onChange={(e) => {
+              setCategory(e.target.value as ProductCategory | 'All');
+              setHasSearched(true);
+            }}
             className="mt-2 w-full rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
           >
             <option value="All">All</option>
@@ -176,7 +195,7 @@ export function ProductSearch({
           {query ? (
             <button
               type="button"
-              onClick={() => setQuery('')}
+              onClick={handleClearSearch}
               className="text-sm text-accent-500 hover:text-accent-500/90"
             >
               Clear search
@@ -185,13 +204,13 @@ export function ProductSearch({
         </div>
       </div>
 
-      {sortedProducts.length ? (
+      {shouldShowResults && sortedProducts.length ? (
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sortedProducts.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
-      ) : (
+      ) : shouldShowResults && !sortedProducts.length ? (
         <div className="mt-10 rounded-2xl border border-white/5 bg-white/5 p-8 text-center">
           <div className="font-display text-2xl text-forest-100">No results found</div>
           <p className="mt-2 text-sm text-forest-100/70">
@@ -201,15 +220,15 @@ export function ProductSearch({
             <div className="mt-4">
               <button
                 type="button"
-                onClick={() => setQuery('')}
+                onClick={handleClearSearch}
                 className="text-sm text-accent-500 hover:text-accent-500/90"
               >
-                Clear search and show all products
+                Clear search and try again
               </button>
             </div>
           )}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
