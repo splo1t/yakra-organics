@@ -90,6 +90,11 @@ export function ProductSearch({
             Search
           </label>
           <div className="relative mt-2">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-forest-400">
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
             <input
               id="search"
               value={query}
@@ -114,20 +119,32 @@ export function ProductSearch({
                 }
               }}
               placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
-              className="w-full rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 placeholder:text-forest-100/40 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
+              className="h-11 w-full rounded-full border border-forest-200/60 bg-white/90 pl-10 pr-10 text-sm text-forest-900 placeholder:text-forest-400/80 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
             />
+            {query ? (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-forest-400 transition hover:text-forest-600"
+                aria-label="Clear search"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            ) : null}
             {showSuggestions && (suggestions.length > 0 || query.length === 0) && (
-              <div className="absolute z-10 mt-1 w-full rounded-md border border-white/10 bg-forest-950/90 shadow-lg">
+              <div className="absolute z-10 mt-2 w-full rounded-xl border border-forest-200/60 bg-white/95 shadow-lg">
                 {query.length === 0 ? (
                   <div className="p-3">
-                    <p className="text-xs text-forest-100/70 mb-2">Popular searches:</p>
+                    <p className="mb-2 text-xs text-forest-500">Popular searches:</p>
                     <div className="flex flex-wrap gap-2">
                       {popularTerms.map(term => (
                         <button
                           key={term}
                           type="button"
                           onClick={() => handleSelectSuggestion(term)}
-                          className="rounded-full bg-forest-800/50 px-3 py-1 text-xs text-forest-100 hover:bg-forest-700/50"
+                          className="rounded-full bg-forest-100 px-3 py-1 text-xs text-forest-700 transition hover:bg-forest-200"
                         >
                           {term}
                         </button>
@@ -142,7 +159,7 @@ export function ProductSearch({
                         type="button"
                         onClick={() => handleSelectSuggestion(suggestion)}
                         onMouseEnter={() => setActiveSuggestionIndex(index)}
-                        className={`w-full px-3 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-accent-500/20' : 'hover:bg-forest-800/50'} text-forest-100`}
+                        className={`w-full px-4 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-forest-100/70' : 'hover:bg-forest-50'} text-forest-900`}
                       >
                         {suggestion}
                       </button>
@@ -192,15 +209,6 @@ export function ProductSearch({
             <option value="price">Sort by: Price (Low to High)</option>
             <option value="popularity">Sort by: Popularity</option>
           </select>
-          {query ? (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="text-sm text-accent-500 hover:text-accent-500/90"
-            >
-              Clear search
-            </button>
-          ) : null}
         </div>
       </div>
 
