@@ -58,12 +58,9 @@ export function ProductExplorer({
 
   return (
     <div>
-      <div className="grid gap-4 rounded-2xl border border-white/10 bg-forest-900/40 p-5 shadow-soft backdrop-blur sm:grid-cols-3">
-        <div className="sm:col-span-2" ref={searchRef}>
-          <label className="text-xs font-medium uppercase tracking-[0.2em] text-forest-100/60" htmlFor="search">
-            Find organics
-          </label>
-          <div className="relative mt-3">
+      <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-forest-900/40 p-2 shadow-soft backdrop-blur lg:flex-row lg:items-center">
+        <div className="relative flex-grow" ref={searchRef}>
+          <div className="relative">
             <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-forest-200/70">
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -89,8 +86,8 @@ export function ProductExplorer({
                   setShowSuggestions(false);
                 }
               }}
-              placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
-              className="h-11 w-full rounded-full border border-white/10 bg-forest-950/40 pl-10 pr-10 text-sm text-forest-100 placeholder:text-forest-200/60 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/30"
+              placeholder="Search organics..."
+              className="h-10 w-full rounded-full border border-white/10 bg-forest-950/40 pl-10 pr-10 text-sm text-forest-100 placeholder:text-forest-200/60 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/30"
             />
             {query ? (
               <button
@@ -131,46 +128,42 @@ export function ProductExplorer({
           </div>
         </div>
 
-        <div>
-          <label className="text-xs font-medium uppercase tracking-[0.2em] text-forest-100/60" htmlFor="category">
-            Category
-          </label>
+        <div className="flex flex-wrap gap-2 lg:flex-nowrap">
           <select
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value as ProductCategory | 'All')}
-            className="mt-3 w-full rounded-full border border-white/10 bg-forest-950/40 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
+            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/40 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
           >
-            <option value="All">All</option>
+            <option value="All">All Categories</option>
             {categories.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
             ))}
           </select>
-        </div>
-      </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="text-sm text-forest-100/70">
-          Showing <span className="text-forest-100">{sortedProducts.length}</span> of{' '}
-          <span className="text-forest-100">{products.length}</span> products
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'popularity')}
-            className="rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
+            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/40 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
           >
-            <option value="name">Sort by: Name</option>
-            <option value="price">Sort by: Price (Low to High)</option>
-            <option value="popularity">Sort by: Popularity</option>
+            <option value="name">Sort: Name</option>
+            <option value="price">Sort: Price</option>
+            <option value="popularity">Sort: Popularity</option>
           </select>
         </div>
       </div>
 
+      <div className="mt-3 flex items-center justify-between px-2">
+        <div className="text-[10px] uppercase tracking-wider text-forest-100/40">
+          Showing <span className="text-forest-100/60">{sortedProducts.length}</span> of{' '}
+          <span className="text-forest-100/60">{products.length}</span> products
+        </div>
+      </div>
+
       {sortedProducts.length ? (
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sortedProducts.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
