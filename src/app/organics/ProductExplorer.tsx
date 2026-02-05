@@ -89,45 +89,24 @@ export function ProductExplorer({
               placeholder="Search by product name or tags (e.g., moringa, smoothie, fresh)"
               className="w-full rounded-md border border-white/10 bg-forest-950/60 px-3 py-2 text-sm text-forest-100 placeholder:text-forest-100/40 focus:outline-none focus:ring-2 focus:ring-accent-500/50"
             />
-            {showSuggestions && (suggestions.length > 0 || query.length === 0) && (
+            {showSuggestions && suggestions.length > 0 && (
               <div className="absolute z-10 mt-1 w-full rounded-md border border-white/10 bg-forest-950/90 shadow-lg">
-                {query.length === 0 ? (
-                  <div className="p-3">
-                    <p className="text-xs text-forest-100/70 mb-2">Popular searches:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {popularTerms.map(term => (
-                        <button
-                          key={term}
-                          type="button"
-                          onClick={() => {
-                            setQuery(term);
-                            setShowSuggestions(false);
-                          }}
-                          className="rounded-full bg-forest-800/50 px-3 py-1 text-xs text-forest-100 hover:bg-forest-700/50"
-                        >
-                          {term}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="max-h-48 overflow-y-auto">
-                    {suggestions.map((suggestion, index) => (
-                      <button
-                        key={suggestion}
-                        type="button"
-                        onClick={() => {
-                          setQuery(suggestion);
-                          setShowSuggestions(false);
-                        }}
-                        onMouseEnter={() => setActiveSuggestionIndex(index)}
-                        className={`w-full px-3 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-accent-500/20' : 'hover:bg-forest-800/50'} text-forest-100`}
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                <div className="max-h-48 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      onClick={() => {
+                        setQuery(suggestion);
+                        setShowSuggestions(false);
+                      }}
+                      onMouseEnter={() => setActiveSuggestionIndex(index)}
+                      className={`w-full px-3 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-accent-500/20' : 'hover:bg-forest-800/50'} text-forest-100`}
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
