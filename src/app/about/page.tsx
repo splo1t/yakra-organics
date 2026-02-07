@@ -47,7 +47,7 @@ export default function AboutPage() {
 
         <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 shadow-soft">
           <div className="relative aspect-[4/5]">
-            <Image src="/media/about.svg" alt="Yakra story" fill className="object-cover" priority />
+            <Image src="/media/about.png" alt="Yakra story" fill className="object-cover" priority />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-transparent to-transparent" />
           <div className="absolute bottom-6 left-6 right-6 rounded-xl border border-white/10 bg-forest-950/70 p-5 backdrop-blur">

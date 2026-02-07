@@ -1,9 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
+import { siteConfig } from '@/data/siteConfig';
 import { cn } from '@/lib/cn';
 
 const navItems = [
@@ -31,11 +33,16 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-forest-950/70 backdrop-blur supports-[backdrop-filter]:bg-forest-950/50">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="group inline-flex items-baseline gap-2">
-          <span className="font-display text-lg tracking-wide text-forest-100 group-hover:text-white">
-            Yakra
-          </span>
-          <span className="text-xs text-forest-100/70">Sri Lanka</span>
+        <Link href="/" className="group relative inline-flex items-center">
+          <div className="relative h-8 w-24">
+            <Image
+              src={siteConfig.logoImage}
+              alt="Yakra.lk"
+              fill
+              className="object-contain object-left"
+              priority
+            />
+          </div>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">

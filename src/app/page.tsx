@@ -74,7 +74,7 @@ export default function HomePage() {
             <div className="rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
               <div className="flex items-start gap-4">
                 <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-white/5 bg-forest-950">
-                  <Image src="/media/organics.svg" alt="Yakra Organics" fill className="object-cover" />
+                  <Image src="/media/organics.png" alt="Yakra Organics" fill className="object-cover" />
                 </div>
                 <div>
                   <h2 className="font-display text-2xl text-forest-100">Yakra Organics</h2>
@@ -94,7 +94,7 @@ export default function HomePage() {
             <div className="rounded-2xl border border-white/5 bg-white/5 p-6 shadow-soft">
               <div className="flex items-start gap-4">
                 <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-white/5 bg-forest-950">
-                  <Image src="/media/glamp.svg" alt="Yakra Glamp" fill className="object-cover" />
+                  <Image src="/media/glamp.png" alt="Yakra Glamp" fill className="object-cover" />
                 </div>
                 <div>
                   <h2 className="font-display text-2xl text-forest-100">Yakra Glamp</h2>

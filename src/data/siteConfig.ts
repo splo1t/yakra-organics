@@ -3,7 +3,8 @@ export const siteConfig = {
   description:
     'Yakra is a premium Sri Lankan brand for dehydrated powders, microgreens, and nature-inspired glamping experiences.',
   siteUrl: 'https://yakra.lk',
-  heroImage: '/media/hero.svg',
+  heroImage: '/media/hero.png',
+  logoImage: '/media/logo.png',
   social: {
     instagram: 'https://instagram.com/',
     facebook: 'https://facebook.com/'
