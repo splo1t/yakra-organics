@@ -111,7 +111,7 @@ export function ProductSearch({
                 }
               }}
               placeholder="Search organics..."
-              className="h-10 w-full rounded-full border border-forest-200/60 bg-white/90 pl-10 pr-10 text-sm text-forest-900 placeholder:text-forest-400/80 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+              className="h-10 w-full rounded-full border border-white/10 bg-forest-950/40 pl-10 pr-10 text-sm text-forest-100 placeholder:text-forest-200/60 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
             />
             {query ? (
               <button
