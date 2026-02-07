@@ -53,7 +53,7 @@ export default function GlampPage() {
 
         <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 shadow-soft">
           <div className="relative aspect-[4/5]">
-            <Image src="/media/glamp.svg" alt="Yakra Glamp teaser" fill className="object-cover" priority />
+            <Image src="/media/glamp.png" alt="Yakra Glamp teaser" fill className="object-cover" priority />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest-950/60 via-transparent to-transparent" />
         </div>

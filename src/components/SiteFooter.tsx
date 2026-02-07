@@ -1,8 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
+import { Container } from '@/components/Container';
 import { siteConfig } from '@/data/siteConfig';
 import { WHATSAPP_NUMBER } from '@/data/whatsapp';
-import { Container } from '@/components/Container';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -18,7 +19,14 @@ export function SiteFooter() {
       <Container className="py-10">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <div className="font-display text-lg text-forest-100">Yakra.lk</div>
+            <div className="relative h-6 w-20">
+              <Image
+                src={siteConfig.logoImage}
+                alt="Yakra.lk"
+                fill
+                className="object-contain object-left"
+              />
+            </div>
             <p className="mt-2 max-w-sm text-sm leading-relaxed text-forest-100/70">
               Premium dehydrated powders and microgreens from Sri Lanka. Yakra Glamp is launching soon.
             </p>
