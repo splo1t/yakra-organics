@@ -26,6 +26,20 @@ The site will be available at `http://localhost:3000`
 
 This guide is organized by what you want to edit. Find your task below and follow the simple instructions.
 
+### Quick Reference: Where to Edit What
+
+| What to Edit | File | Key Concept |
+|--------------|------|-------------|
+| Add new products | `src/data/products.ts` | Each product has its own unique `buyingOptions` with custom prices |
+| Change product prices | `src/data/products.ts` | Find the product, edit its `buyingOptions` array |
+| Contact info (email, phone, address) | `src/data/siteConfig.ts` | Site-wide configuration |
+| WhatsApp number | `src/data/whatsapp.ts` | Single number for all WhatsApp links |
+| Hero image | `src/data/siteConfig.ts` | Update `heroImage` path |
+| Colors/styling | `tailwind.config.ts` | Modify theme colors |
+| Navigation links | `src/components/SiteHeader.tsx` | Edit `navItems` array |
+
+---
+
 ### 1. Want to Edit Products? (Add/Remove/Change)
 
 **Where to edit:** `src/data/products.ts`
@@ -33,6 +47,8 @@ This guide is organized by what you want to edit. Find your task below and follo
 This file contains ALL product data. Add or modify products here—no database needed.
 
 #### Adding a New Product
+
+Each product has its own unique buying options with different prices. When adding a new product, you must define its buying options inline:
 
 ```typescript
 {
@@ -44,8 +60,31 @@ This file contains ALL product data. Add or modify products here—no database n
   shortDescription: 'Brief one-line description for cards',
   description: 'Full detailed description...',
   nutritionalBenefits: 'Optional nutritional info...',  // Optional field
-  priceLkr: 3500,  // Base price (used if no buying options)
-  buyingOptions: defaultMicrogreensBuyingOptions,  // Optional: use for multiple price tiers
+  priceLkr: 1100,  // Base price (usually matches your first buying option)
+  buyingOptions: [
+    {
+      id: 'single-tray',
+      label: 'Single Live Tray',
+      price: 1100,  // ← Set YOUR price for this product
+      bestFor: 'One-time trial or a healthy gift',
+      priceSubtext: 'One-time purchase'
+    },
+    {
+      id: 'intro-offer',
+      label: 'Introductory Offer',
+      price: 850,  // ← Set YOUR price for this product
+      bestFor: 'First-time customers (Limited Batch)',
+      priceSubtext: 'Limited time for first-time customers'
+    },
+    {
+      id: 'monthly-subscription',
+      label: 'Monthly Subscription',
+      price: 3400,  // ← Set YOUR price for this product
+      bestFor: '4 Trays (1 per week) - Best Value',
+      priceSubtext: 'Includes 4 trays (1 per week)',
+      isMostPopular: true  // ← Only ONE option should have this
+    }
+  ],
   images: ['/products/url-friendly-name/1.svg'],
   usage: 'How to use...',
   storage: 'Storage instructions...',
@@ -59,6 +98,9 @@ This file contains ALL product data. Add or modify products here—no database n
 - **tags** are used for search—include relevant keywords
 - **nutritionalBenefits** is optional but displays nicely on product pages
 - **usage** and **storage** text supports line breaks with `\n`
+- **Each product MUST have its own `buyingOptions` array** with unique prices
+- Only ONE buying option per product should have `isMostPopular: true`
+- The `priceLkr` field is optional but recommended (typically matches your default option)
 
 #### Product Images
 
@@ -72,45 +114,80 @@ The site currently has **1 product**: Red Amaranth Microgreens
 
 To add more products, simply add them to the `products` array in `src/data/products.ts`.
 
----
+#### Example: Adding Multiple Products with Different Prices
 
-### 2. Want to Change Buying Options (Price Plans)?
-
-**Where to edit:** `src/data/products.ts`
-
-Find the `defaultMicrogreensBuyingOptions` array (near the top of the file):
+Here's how you might add two products with different pricing:
 
 ```typescript
-export const defaultMicrogreensBuyingOptions: BuyingOption[] = [
+export const products: Product[] = [
   {
-    id: 'single-tray',
-    label: 'Single Live Tray',           // Name shown in dropdown
-    price: 1100,                            // Price in LKR
-    bestFor: 'One-time trial or a healthy gift',  // Helper text
-    priceSubtext: 'One-time purchase',     // Small text under price
-    isMostPopular: false                   // Adds "Most Popular" badge
+    id: 'yakra-red-amaranth-microgreens',
+    name: 'Red Amaranth Microgreens: The Vibrant Superfood',
+    // ... other fields ...
+    buyingOptions: [
+      { id: 'single-tray', label: 'Single Live Tray', price: 1100, ... },
+      { id: 'intro-offer', label: 'Introductory Offer', price: 850, ... },
+      { id: 'monthly-subscription', label: 'Monthly Subscription', price: 3400, ... }
+    ]
   },
   {
-    id: 'intro-offer',
-    label: 'Introductory Offer',
-    price: 850,
-    bestFor: 'First-time customers (Limited Batch)',
-    priceSubtext: 'Limited time for first-time customers',
-    isMostPopular: false
-  },
-  {
-    id: 'monthly-subscription',
-    label: 'Monthly Subscription',
-    price: 3400,
-    bestFor: '4 Trays (1 per week) - Best Value',
-    priceSubtext: 'Includes 4 trays (1 per week)',
-    isMostPopular: true  // ← This is the default selected option
+    id: 'yakra-broccoli-microgreens',
+    name: 'Broccoli Microgreens: The Nutrient Powerhouse',
+    // ... other fields ...
+    buyingOptions: [
+      { id: 'single-tray', label: 'Single Live Tray', price: 950, ... },   // Different price!
+      { id: 'intro-offer', label: 'Introductory Offer', price: 750, ... },  // Different price!
+      { id: 'monthly-subscription', label: 'Monthly Subscription', price: 3000, ... }  // Different price!
+    ]
   }
 ];
 ```
 
+Notice how each product has its own `buyingOptions` array with completely different prices!
+
+---
+
+### 2. Want to Change Prices for Existing Products?
+
+**Where to edit:** `src/data/products.ts`
+
+Find the specific product in the `products` array and edit its `buyingOptions`:
+
+```typescript
+{
+  id: 'yakra-red-amaranth-microgreens',
+  // ... other product fields ...
+  buyingOptions: [
+    {
+      id: 'single-tray',
+      label: 'Single Live Tray',
+      price: 1200,  // ← Edit this price
+      bestFor: 'One-time trial or a healthy gift',
+      priceSubtext: 'One-time purchase'
+    },
+    {
+      id: 'intro-offer',
+      label: 'Introductory Offer',
+      price: 950,  // ← Edit this price
+      bestFor: 'First-time customers (Limited Batch)',
+      priceSubtext: 'Limited time for first-time customers'
+    },
+    {
+      id: 'monthly-subscription',
+      label: 'Monthly Subscription',
+      price: 3800,  // ← Edit this price
+      bestFor: '4 Trays (1 per week) - Best Value',
+      priceSubtext: 'Includes 4 trays (1 per week)',
+      isMostPopular: true
+    }
+  ],
+  // ... other product fields ...
+}
+```
+
 **Key Rules:**
-- Only one option should have `isMostPopular: true`
+- Each product has its own independent set of buying options with unique prices
+- Only one option per product should have `isMostPopular: true`
 - The option with `isMostPopular: true` is automatically selected by default
 - The dropdown only shows option names (no prices inside dropdown)
 - Price updates instantly when user changes selection
@@ -294,7 +371,7 @@ The product page displays these sections in order:
 │   │   ├── SiteHeader.tsx     # Navigation
 │   │   └── SiteFooter.tsx     # Footer
 │   └── data/                  # ALL editable data
-│       ├── products.ts        # ← Products & buying options
+│       ├── products.ts        # ← Products (each with unique buying options)
 │       ├── siteConfig.ts      # ← Site branding & contact info
 │       └── whatsapp.ts        # ← WhatsApp number
 ```
@@ -347,10 +424,12 @@ The product page displays these sections in order:
   ```
 
 ### Buying Options
+- Each product has its own unique buying options with custom prices
 - Dropdown selector shows only option names
 - Price updates instantly on selection
 - "Most Popular" badge highlights the best option
 - Default selection is the option with `isMostPopular: true`
+- Prices vary per product - no shared pricing across products
 
 ---
 
@@ -376,10 +455,10 @@ No environment variables required—all config is in code.
 ## ❓ Common Questions
 
 ### How do I add a new product?
-Edit `src/data/products.ts`, add to the `products` array. See section 1 above.
+Edit `src/data/products.ts`, add to the `products` array. Each product must have its own `buyingOptions` array with unique prices. See section 1 above.
 
-### How do I change prices?
-Edit `defaultMicrogreensBuyingOptions` in `src/data/products.ts`. See section 2 above.
+### How do I change prices for a specific product?
+Find the product in `src/data/products.ts` and edit the prices in its `buyingOptions` array. Each product has its own independent pricing. See section 2 above.
 
 ### How do I add more images to a product?
 1. Add images to `public/products/your-product-slug/`
@@ -393,6 +472,9 @@ Edit `src/data/siteConfig.ts`. See section 3 above.
 
 ### Where do I change the WhatsApp number?
 Edit `src/data/whatsapp.ts`. See section 4 above.
+
+### Do all products need the same buying options?
+No! Each product can have completely different prices for each buying option. You customize prices individually for every product.
 
 ---
 
