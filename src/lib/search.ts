@@ -36,14 +36,10 @@ export function getSearchSuggestions(products: Product[], query: string): string
 
 export function getPopularSearchTerms(): string[] {
   return [
-    'moringa',
     'microgreens',
     'powder',
-    'smoothie',
     'fresh',
-    'organic',
     'superfood',
-    'antioxidant',
-    'healthy'
+    'antioxidant'
   ];
 }
