@@ -107,8 +107,8 @@ export function ProductExplorer({
               </button>
             ) : null}
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-10 mt-2 w-full rounded-2xl border border-white/10 bg-forest-950/95 shadow-xl">
-                <div className="max-h-48 overflow-y-auto">
+              <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-forest-950/95 shadow-xl backdrop-blur-sm">
+                <div className="max-h-48 overflow-y-auto py-1">
                   {suggestions.map((suggestion, index) => (
                     <button
                       key={suggestion}
@@ -118,7 +118,7 @@ export function ProductExplorer({
                         setShowSuggestions(false);
                       }}
                       onMouseEnter={() => setActiveSuggestionIndex(index)}
-                      className={`w-full px-4 py-2 text-left text-sm text-forest-100 ${index === activeSuggestionIndex ? 'bg-forest-800/70' : 'hover:bg-forest-900/70'}`}
+                      className={`w-full border-t border-white/5 px-4 py-2.5 text-left text-sm text-forest-100 transition first:border-t-0 ${index === activeSuggestionIndex ? 'bg-forest-800/70' : 'hover:bg-forest-800/60'}`}
                     >
                       {suggestion}
                     </button>
