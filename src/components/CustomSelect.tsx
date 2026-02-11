@@ -73,7 +73,7 @@ export function CustomSelect({ id, value, onChange, options, className = '' }: C
       </button>
 
       {isOpen && (
-        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-forest-950/95 shadow-xl backdrop-blur-sm">
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-forest-950/95 shadow-xl backdrop-blur-sm">
           <ul role="listbox" className="max-h-64 overflow-y-auto py-1">
             {options.map((option, index) => (
               <li

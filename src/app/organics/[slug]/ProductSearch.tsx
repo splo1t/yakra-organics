@@ -3,6 +3,7 @@
 import { useMemo, useState, useRef } from 'react';
 
 import { ProductCard } from '@/components/ProductCard';
+import { CustomSelect } from '@/components/CustomSelect';
 import type { Product, ProductCategory } from '@/data/products';
 import { getSearchSuggestions, getPopularSearchTerms } from '@/lib/search';
 
@@ -79,10 +80,10 @@ export function ProductSearch({
 
   return (
     <div>
-      <div className="flex flex-col gap-2 rounded-2xl border border-white/5 bg-white/5 p-2 shadow-soft lg:flex-row lg:items-center">
+      <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-forest-900/40 p-2 shadow-soft backdrop-blur lg:flex-row lg:items-center">
         <div className="relative flex-grow" ref={searchRef}>
           <div className="relative">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-forest-400">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-forest-200/70">
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m1.35-4.65a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -111,13 +112,13 @@ export function ProductSearch({
                 }
               }}
               placeholder="Search organics..."
-              className="h-10 w-full rounded-full border border-white/10 bg-forest-950/40 pl-10 pr-10 text-sm text-forest-100 placeholder:text-forest-200/60 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/20"
+              className="h-10 w-full rounded-full border border-white/10 bg-forest-950/40 pl-10 pr-10 text-sm text-forest-100 placeholder:text-forest-200/60 transition focus:border-accent-500/60 focus:outline-none focus:ring-2 focus:ring-accent-500/30"
             />
             {query ? (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-forest-400 transition hover:text-forest-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-forest-200/70 transition hover:text-forest-100"
                 aria-label="Clear search"
               >
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
@@ -126,17 +127,17 @@ export function ProductSearch({
               </button>
             ) : null}
             {showSuggestions && (suggestions.length > 0 || query.length === 0) && (
-              <div className="absolute z-10 mt-2 w-full rounded-xl border border-forest-200/60 bg-white/95 shadow-lg">
+              <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-forest-950/95 shadow-xl backdrop-blur-sm">
                 {query.length === 0 ? (
                   <div className="p-3">
-                    <p className="mb-2 text-xs text-forest-500">Popular searches:</p>
+                    <p className="mb-2 text-xs text-forest-100/50">Popular searches:</p>
                     <div className="flex flex-wrap gap-2">
                       {popularTerms.map(term => (
                         <button
                           key={term}
                           type="button"
                           onClick={() => handleSelectSuggestion(term)}
-                          className="rounded-full bg-forest-100 px-3 py-1 text-xs text-forest-700 transition hover:bg-forest-200"
+                          className="rounded-full bg-forest-800/60 px-3 py-1 text-xs text-forest-100 transition hover:bg-forest-700/60"
                         >
                           {term}
                         </button>
@@ -144,14 +145,14 @@ export function ProductSearch({
                     </div>
                   </div>
                 ) : (
-                  <div className="max-h-48 overflow-y-auto">
+                  <div className="max-h-48 overflow-y-auto py-1">
                     {suggestions.map((suggestion, index) => (
                       <button
                         key={suggestion}
                         type="button"
                         onClick={() => handleSelectSuggestion(suggestion)}
                         onMouseEnter={() => setActiveSuggestionIndex(index)}
-                        className={`w-full px-4 py-2 text-left text-sm ${index === activeSuggestionIndex ? 'bg-forest-100/70' : 'hover:bg-forest-50'} text-forest-900`}
+                        className={`w-full border-t border-white/5 px-4 py-2.5 text-left text-sm text-forest-100 transition first:border-t-0 ${index === activeSuggestionIndex ? 'bg-forest-800/70' : 'hover:bg-forest-800/60'}`}
                       >
                         {suggestion}
                       </button>
@@ -164,32 +165,30 @@ export function ProductSearch({
         </div>
 
         <div className="flex flex-wrap gap-2 lg:flex-nowrap">
-          <select
+          <CustomSelect
             id="category"
             value={category}
-            onChange={(e) => {
-              setCategory(e.target.value as ProductCategory | 'All');
+            onChange={(value) => {
+              setCategory(value as ProductCategory | 'All');
               setHasSearched(true);
             }}
-            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/60 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
-          >
-            <option value="All">All Categories</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+            options={[
+              { value: 'All', label: 'All Categories' },
+              ...categories.map((c) => ({ value: c, label: c }))
+            ]}
+            className="flex-grow lg:w-44 lg:flex-none"
+          />
 
-          <select
+          <CustomSelect
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'popularity')}
-            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/60 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
-          >
-            <option value="name">Sort: Name</option>
-            <option value="price">Sort: Price</option>
-            <option value="popularity">Sort: Popularity</option>
-          </select>
+            onChange={(value) => setSortBy(value as 'name' | 'price' | 'popularity')}
+            options={[
+              { value: 'name', label: 'Sort: Name' },
+              { value: 'price', label: 'Sort: Price' },
+              { value: 'popularity', label: 'Sort: Popularity' }
+            ]}
+            className="flex-grow lg:w-44 lg:flex-none"
+          />
         </div>
       </div>
 
