@@ -3,6 +3,7 @@
 import { useMemo, useState, useRef } from 'react';
 
 import { ProductCard } from '@/components/ProductCard';
+import { CustomSelect } from '@/components/CustomSelect';
 import type { Product, ProductCategory } from '@/data/products';
 import { getSearchSuggestions } from '@/lib/search';
 
@@ -129,29 +130,27 @@ export function ProductExplorer({
         </div>
 
         <div className="flex flex-wrap gap-2 lg:flex-nowrap">
-          <select
+          <CustomSelect
             id="category"
             value={category}
-            onChange={(e) => setCategory(e.target.value as ProductCategory | 'All')}
-            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/40 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
-          >
-            <option value="All">All Categories</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+            onChange={(value) => setCategory(value as ProductCategory | 'All')}
+            options={[
+              { value: 'All', label: 'All Categories' },
+              ...categories.map((c) => ({ value: c, label: c }))
+            ]}
+            className="flex-grow lg:w-44 lg:flex-none"
+          />
 
-          <select
+          <CustomSelect
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'popularity')}
-            className="h-10 flex-grow rounded-full border border-white/10 bg-forest-950/40 px-4 py-2 text-sm text-forest-100 focus:outline-none focus:ring-2 focus:ring-accent-500/50 lg:w-44 lg:flex-none"
-          >
-            <option value="name">Sort: Name</option>
-            <option value="price">Sort: Price</option>
-            <option value="popularity">Sort: Popularity</option>
-          </select>
+            onChange={(value) => setSortBy(value as 'name' | 'price' | 'popularity')}
+            options={[
+              { value: 'name', label: 'Sort: Name' },
+              { value: 'price', label: 'Sort: Price' },
+              { value: 'popularity', label: 'Sort: Popularity' }
+            ]}
+            className="flex-grow lg:w-44 lg:flex-none"
+          />
         </div>
       </div>
 
